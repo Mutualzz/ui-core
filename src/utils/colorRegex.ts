@@ -1,103 +1,96 @@
-import { parse } from "culori";
+import type { ColorLike } from "@ui-types";
+import Color from "color";
 
 // Helper to trim and remove trailing semicolon
-const cleanInput = (value: string) => value.trim().replace(/;$/, "");
+const cleanInput = (raw: string) =>
+    raw
+        .trim()
+        .replace(/^['"]|['"]$/g, "")
+        .replace(/;+$/, "")
+        .replace(/\s+/g, " ");
 
-// Regex patterns
+const BYTE = "(?:25[0-5]|2[0-4]\\d|1?\\d?\\d)"; // 0–255
+const PCT = "(?:100(?:\\.0+)?|\\d?\\d(?:\\.\\d+)?)%"; // 0%–100%
+const ALPHA_STRICT = `(?:0|1|0?\\.\\d+|${PCT})`; // 0–1 or percent
+const HUE = "(?:360(?:\\.0+)?|\\d?\\d?\\d(?:\\.\\d+)?)"; // 0–360 (no units)
+
+// Hex Regex
 export const hexRegex = /^#([0-9a-fA-F]{3,4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/;
-export const rgbRegex = /^rgb\(\s*\d{1,3}\s*,\s*\d{1,3}\s*,\s*\d{1,3}\s*\)$/;
-export const rgbaRegex =
-    /^rgba\(\s*\d{1,3}\s*,\s*\d{1,3}\s*,\s*\d{1,3}\s*,\s*(0|1|0?\.\d+)\s*\)$/;
-export const hslRegex = /^hsl\(\s*\d{1,3}\s*,\s*\d{1,3}%\s*,\s*\d{1,3}%\s*\)$/;
-export const hslaRegex =
-    /^hsla\(\s*\d{1,3}\s*,\s*\d{1,3}%\s*,\s*\d{1,3}%\s*,\s*(0|1|0?\.\d+)\s*\)$/;
-export const linearGradientRegex = /^linear-gradient\((.+)\)$/i;
-export const radialGradientRegex = /^radial-gradient\((.+)\)$/i;
-export const conicGradientRegex = /^conic-gradient\((.+)\)$/i;
-export const gradientRegex = /^(linear|radial|conic)-gradient\((.+)\)$/i;
 
-/**
- * Checks if the input is a valid hex color.
- */
-export const isValidHex = (value: string): boolean =>
-    hexRegex.test(cleanInput(value));
+// RGB Regex
+export const rgbStrictRegex = new RegExp(
+    String.raw`^rgba?\(\s*(?:` +
+        String.raw`(${BYTE})\s*,\s*(${BYTE})\s*,\s*(${BYTE})(?:\s*,\s*(${ALPHA_STRICT}))?` +
+        String.raw`|` +
+        String.raw`${BYTE}\s+${BYTE}\s+${BYTE}(?:\s*/\s*${ALPHA_STRICT})?` +
+        String.raw`)\s*\)$`,
+    "i",
+);
 
-/**
- * Checks if the input is a valid RGB color.
- * RGB format: rgb(r, g, b)
- * where r, g, b are integers between 0 and 255.
- */
-export const isValidRgb = (value: string): boolean =>
-    rgbRegex.test(cleanInput(value));
+// hsl Regex
+export const hslStrictRegex = new RegExp(
+    String.raw`^hsla?\(\s*(?:` +
+        String.raw`(${HUE})\s*,\s*(${PCT})\s*,\s*(${PCT})(?:\s*,\s*(${ALPHA_STRICT}))?` +
+        String.raw`|` +
+        String.raw`${HUE}\s+${PCT}\s+${PCT}(?:\s*/\s*${ALPHA_STRICT})?` +
+        String.raw`)\s*\)$`,
+    "i",
+);
 
-/**
- * Checks if the input is a valid RGBA color.
- * RGBA format: rgba(r, g, b, a)
- * where r, g, b are integers between 0 and 255,
- * and a is a number between 0 and 1 (inclusive).
- */
-export const isValidRgba = (value: string): boolean =>
-    rgbaRegex.test(cleanInput(value));
+// More permissive regex patterns (loose) for rgb/rgba
+export const rgbLooseRegex =
+    /^rgba?\(\s*(?:\d+\s*,\s*\d+\s*,\s*\d+(?:\s*,\s*(?:\d*\.?\d+|\d+%))?|(?:\d+\s+){2}\d+(?:\s*\/\s*(?:\d*\.?\d+|\d+%))?)\s*\)$/i;
 
-/**
- * Checks if the input is a valid HSL color.
- * HSL format: hsl(h, s%, l%)
- * where h is an integer between 0 and 360,
- * s and l are percentages between 0% and 100%.
- */
-export const isValidHsl = (value: string): boolean =>
-    hslRegex.test(cleanInput(value));
+// More permissive regex patterns (loose) for hsl/hsla
+export const hslLooseRegex =
+    /^hsla?\(\s*(?:-?\d*\.?\d+\s*,\s*\d*\.?\d+%\s*,\s*\d*\.?\d+%(?:\s*,\s*(?:\d*\.?\d+|\d+%))?| -?\d*\.?\d+\s+\d*\.?\d+%\s+\d*\.?\d+%(?:\s*\/\s*(?:\d*\.?\d+|\d+%))?)\s*\)$/i;
 
-/**
- * Checks if the input is a valid HSLA color.
- * HSLA format: hsla(h, s%, l%, a)
- * where h is an integer between 0 and 360,
- * s and l are percentages between 0% and 100%,
- * and a is a number between 0 and 1 (inclusive).
- */
-export const isValidHsla = (value: string): boolean =>
-    hslaRegex.test(cleanInput(value));
+// Use strict versions by default
+export const cssVarRegex = /^var\(\s*--[A-Za-z0-9-_]+\s*(?:,\s*[^)]+)?\)$/;
+export const gradientRegex =
+    /^(repeating-)?(linear|radial|conic)-gradient\((.+)\)$/i;
 
-export const isValidLinearGradient = (value: string): boolean =>
-    linearGradientRegex.test(cleanInput(value));
+// Helpers
+export const isValidHex = (v: ColorLike) => hexRegex.test(cleanInput(v));
+export const isValidCssVar = (v: string) => cssVarRegex.test(cleanInput(v));
+export const isValidGradient = (v: string) => gradientRegex.test(cleanInput(v));
+export const isRgbStrict = (v: string) => rgbStrictRegex.test(cleanInput(v));
+export const isHslStrict = (v: string) => hslStrictRegex.test(cleanInput(v));
+export const isRgbLoose = (v: string) => rgbLooseRegex.test(cleanInput(v));
+export const isHslLoose = (v: string) => hslLooseRegex.test(cleanInput(v));
 
-/**
- * Checks if the input is a valid radial-gradient string.
- */
-export const isValidRadialGradient = (value: string): boolean =>
-    radialGradientRegex.test(cleanInput(value));
+type Mode = "strict" | "loose";
 
-/**
- * Checks if the input is a valid conic-gradient string.
- */
-export const isValidConicGradient = (value: string): boolean =>
-    conicGradientRegex.test(cleanInput(value));
+export const isValidColorInput = (value: string, mode: Mode = "strict") => {
+    const str = cleanInput(value) as ColorLike;
 
-export const isValidGradient = (value: string): boolean =>
-    gradientRegex.test(cleanInput(value));
+    if (isValidCssVar(str) || isValidGradient(str)) return true;
 
-/**
- * Checks if the input is a valid color input.
- * It checks for valid hex, rgb, rgba, hsl, and hsla formats.
- * Returns true if the input is valid, false otherwise.
- */
-export const isValidColorInput = (value: string): boolean => {
-    // First check the existing regex patterns for performance
-    const trimmed = cleanInput(value);
+    const fastOk =
+        isValidHex(str) ||
+        (mode === "strict"
+            ? isRgbStrict(str) || isHslStrict(str)
+            : isRgbLoose(str) || isHslLoose(str));
 
-    if (isValidGradient(trimmed)) return true;
+    if (fastOk) return true;
 
-    const isValidFormat =
-        isValidHex(trimmed) ||
-        isValidRgb(trimmed) ||
-        isValidRgba(trimmed) ||
-        isValidHsl(trimmed) ||
-        isValidHsla(trimmed);
+    try {
+        new Color(str);
+        return true;
+    } catch {
+        return false;
+    }
+};
 
-    if (isValidFormat) return true;
+export const normalizeColor = (value: string): string | null => {
+    const s = cleanInput(value);
 
-    // If regex patterns don't match, use culori to check for named colors
-    // and other valid CSS color formats
-    const parsed = parse(trimmed);
-    return parsed !== undefined;
+    if (isValidCssVar(s) || isValidGradient(s)) return null;
+
+    try {
+        const c = new Color(s);
+        return c.alpha() === 1 ? c.rgb().string() : c.rgb().string();
+    } catch {
+        return null;
+    }
 };

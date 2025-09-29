@@ -1,4 +1,4 @@
-import type { AllowNumber, Responsive } from "./index";
+import type { AllowNumber, Responsive } from ".";
 
 import type { Properties } from "csstype";
 

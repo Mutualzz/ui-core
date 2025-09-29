@@ -3,16 +3,12 @@ export * from "./hooks/useColorInput";
 export * from "./hooks/useEventListener";
 export * from "./hooks/useIsomorphicLayoutEffect";
 export * from "./hooks/useOnClickOutside";
-export * from "./hooks/useTheme";
 
 // Themes
 export * from "./themes";
 
 // Utils
 export * from "./utils";
-
-// Misc
-export * from "./ThemeProvider";
 
 export { default as styled } from "./utils/styled";
 

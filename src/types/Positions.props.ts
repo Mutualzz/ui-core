@@ -1,6 +1,6 @@
 import type { Theme } from "@emotion/react";
 import type { Properties } from "csstype";
-import { type AllowNumber, type Responsive } from "./index";
+import { type AllowNumber, type Responsive } from ".";
 
 export interface HTMLPositionsProps {
     position?: Responsive<Properties["position"]>;

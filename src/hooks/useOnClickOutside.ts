@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 import type { RefObject } from "react";
 import { useEventListener } from "./useEventListener";
 

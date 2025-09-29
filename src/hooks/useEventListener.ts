@@ -1,8 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unnecessary-condition */
-import { useEffect, useRef } from "react";
-
 import type { RefObject } from "react";
-
+import { useEffect, useRef } from "react";
 import { useIsomorphicLayoutEffect } from "./useIsomorphicLayoutEffect";
 
 // MediaQueryList Event based useEventListener interface

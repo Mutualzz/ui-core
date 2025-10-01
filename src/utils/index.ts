@@ -1,29 +1,4 @@
-import type { ColorLike, TypographyLevelObj } from "@ui-types";
-import { clampChroma, formatHex, lch } from "culori";
-import { isValidGradient } from "./colorRegex";
-import { extractGradientStops, reconstructGradient } from "./gradients";
-
-export function darken(color: ColorLike, factor: number) {
-    if (isValidGradient(color)) {
-        const stops = extractGradientStops(color);
-
-        const stopsDarkened = stops.map((stop) => {
-            const colorLch = lch(stop);
-            if (!colorLch) return stop;
-            colorLch.l = Math.max(0, colorLch.l * (1 - factor));
-            return formatHex(clampChroma(colorLch));
-        });
-
-        return reconstructGradient(color, stopsDarkened);
-    }
-
-    const colorLch = lch(color);
-    if (!colorLch) return color;
-
-    colorLch.l = Math.max(0, colorLch.l * (1 - factor));
-
-    return formatHex(clampChroma(colorLch));
-}
+import type { TypographyLevelObj } from "@ui-types";
 
 export const getScrollableAncestors = (
     node: HTMLElement | null,
@@ -70,31 +45,6 @@ export const normalizeTypography = (level: TypographyLevelObj) => {
         letterSpacing,
         fontWeight,
     };
-};
-
-export const lighten = (color: ColorLike, factor: number) => {
-    if (isValidGradient(color)) {
-        const stops = extractGradientStops(color);
-
-        const stopsLightened = stops.map((stop) => {
-            const colorLch = lch(stop);
-            if (!colorLch) return stop;
-            colorLch.l = Math.min(
-                100,
-                colorLch.l + (100 - colorLch.l) * factor,
-            );
-            return formatHex(clampChroma(colorLch));
-        });
-
-        return reconstructGradient(color, stopsLightened);
-    }
-
-    const colorLch = lch(color);
-    if (!colorLch) return color;
-
-    colorLch.l = Math.min(100, colorLch.l + (100 - colorLch.l) * factor);
-
-    return formatHex(clampChroma(colorLch));
 };
 
 export const allowedListStyleTypes = [
@@ -153,13 +103,9 @@ export const round = (
     return Math.round(base * number) / base;
 };
 
-export * from "./adjustLightness";
-export * from "./alpha";
 export * from "./colorRegex";
-export * from "./dynamicElevation";
-export * from "./getLuminance";
+export * from "./colorUtils";
 export * from "./getReactElementRef";
-export * from "./gradients";
 export * from "./randomColor";
 export * from "./resolveColors";
 export * from "./resolveSize";

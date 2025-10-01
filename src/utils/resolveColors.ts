@@ -1,6 +1,7 @@
 import type { Theme } from "@emotion/react";
 import { type Color, type ColorLike, type TypographyColor } from "@ui-types";
-import { formatHex } from "./colorUtils";
+import type { ColorInstance } from "color";
+import { formatColor } from "./colorUtils";
 
 export const isThemeColor = (
     color: Color | ColorLike | TypographyColor,
@@ -31,12 +32,13 @@ export const resolveTypographyColor = (
 ) => (isTypographyColor(color) ? theme.typography.colors[color] : color);
 
 export const resolveColorFromLuminance = (
-    luminance: number | null,
+    color: ColorInstance,
     theme: Theme,
 ) => {
-    if (!luminance) return theme.typography.colors.muted;
+    const luminance = color.luminosity() * 100;
 
-    return formatHex(
+    return formatColor(
         luminance < 0.5 ? theme.colors.common.white : theme.colors.common.black,
-    ) as ColorLike;
+        { format: "hexa" },
+    );
 };

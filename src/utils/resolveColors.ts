@@ -36,7 +36,6 @@ export const resolveColorFromLuminance = (
     theme: Theme,
 ) => {
     const luminance = color.luminosity();
-    console.log(luminance);
 
     return formatColor(
         luminance < 0.5 ? theme.colors.common.white : theme.colors.common.black,

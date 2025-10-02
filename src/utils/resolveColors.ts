@@ -39,6 +39,6 @@ export const resolveColorFromLuminance = (
 
     return formatColor(
         luminance < 0.5 ? theme.colors.common.white : theme.colors.common.black,
-        { format: "hexa" },
+        { format: "rgba" },
     );
 };

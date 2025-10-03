@@ -1,7 +1,5 @@
 import type { Theme } from "@emotion/react";
 import { type Color, type ColorLike, type TypographyColor } from "@ui-types";
-import type { ColorInstance } from "color";
-import { formatColor } from "./colorUtils";
 
 export const isThemeColor = (
     color: Color | ColorLike | TypographyColor,
@@ -30,15 +28,3 @@ export const resolveTypographyColor = (
     color: TypographyColor | ColorLike,
     theme: Theme,
 ) => (isTypographyColor(color) ? theme.typography.colors[color] : color);
-
-export const resolveColorFromLuminance = (
-    color: ColorInstance,
-    theme: Theme,
-) => {
-    const luminance = color.luminosity();
-
-    return formatColor(
-        luminance < 0.5 ? theme.colors.common.white : theme.colors.common.black,
-        { format: "rgba" },
-    );
-};

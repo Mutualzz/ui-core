@@ -8,25 +8,25 @@ export const baseLightTheme: Theme = {
     type: "light",
     mode: "normal",
     colors: {
-        common: { white: "#FFFFFF", black: "#121212" },
-        primary: "#8C2F4A",
-        neutral: "#444444",
-        background: "#FAFAFA",
-        surface: "#FFFFFF",
-        danger: "#D32F2F",
-        warning: "#FFD600",
-        success: "#388E3C",
-        info: "#1976D2",
+        common: { white: "#FFFFFF", black: "#0D0F12" },
+        primary: "#5865F2", // unified accent (Discord-inspired)
+        neutral: "#444B57", // darker neutral for text & UI chrome
+        background: "#FFFFFF", // pure white for max contrast
+        surface: "#F2F3F5", // subtle separation from background
+        danger: "#D92D43", // accessible red
+        warning: "#B47F00", // richer amber for contrast
+        success: "#1F7A4D", // deeper green
+        info: "#0B6BCB", // stronger blue info
     },
 
     typography: {
         levels: { ...typographyLevels },
         fontFamily: "Inter, system-ui, sans-serif",
         colors: {
-            primary: "#222222",
-            secondary: "#444444",
-            accent: "#8C2F4A",
-            muted: "#444444",
+            primary: "#1C1F23", // high contrast body text
+            secondary: "#4A5260", // subdued but readable
+            accent: "#5865F2", // matches primary accent
+            muted: "#6F7A86", // improved legibility over old muted
         },
     },
 

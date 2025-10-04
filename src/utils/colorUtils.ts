@@ -2,7 +2,6 @@ import type { ColorLike } from "@ui-types";
 import Color, { type ColorInstance } from "color";
 import gradientParser from "gradient-parser";
 import { isValidGradient } from "./colorRegex";
-import { serializeGradient } from "./serializeGradient";
 
 type OutputFormat = "hex" | "hexa" | "rgb" | "rgba" | "hsl" | "hsla";
 
@@ -89,7 +88,7 @@ export function formatColor(
             }
         }
 
-        return serializeGradient(gradientAst) as ColorLike;
+        return gradientParser.stringify([gradientAst]) as ColorLike;
     }
 
     let col = new Color(colorStr).alpha(alpha / 100);
@@ -136,7 +135,7 @@ export function dynamicElevation(color: ColorLike, elevation: number) {
             }
         }
 
-        return serializeGradient(gradientAst);
+        return gradientParser.stringify([gradientAst]);
     }
 
     let col = new Color(color);

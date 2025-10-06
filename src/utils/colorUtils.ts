@@ -77,7 +77,6 @@ export function formatColor(
                 if (opaquer) col = col.opaquer(opaquer / 100);
 
                 const { type, value } = colorToAstNode(col, format);
-                console.log(type, value);
                 stop.type = type;
                 stop.value = value;
             } catch (err) {

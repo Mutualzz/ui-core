@@ -6,7 +6,7 @@ import { isValidGradient } from "./colorRegex";
 type OutputFormat = "hex" | "hexa" | "rgb" | "rgba" | "hsl" | "hsla";
 
 type FormatOptions = {
-    format?: OutputFormat;
+    format: OutputFormat;
     alpha?: number; // 0-100
 
     // modifiers
@@ -27,18 +27,15 @@ type FormatOptions = {
     opaquer?: number; // 0-100
 };
 
-const defaultFormatOptions: FormatOptions = {
-    alpha: 100,
-    format: "hex",
-};
-
 export function formatColor(
     inputColor: ColorInstance | ColorLike,
-    options: FormatOptions = defaultFormatOptions,
+    options: FormatOptions = {
+        format: "hexa",
+    },
 ): ColorLike {
     const {
-        alpha = 100,
-        format = "hex",
+        alpha,
+        format,
         negate,
         invert,
         grayscale,
@@ -63,10 +60,9 @@ export function formatColor(
             try {
                 if (stop.type === "literal" || stop.type === "var") continue;
 
-                let col = new Color(serializeColorValue(stop.value)).alpha(
-                    alpha / 100,
-                );
+                let col = new Color(serializeColorValue(stop));
 
+                if (alpha) col = col.alpha(alpha / 100);
                 if (negate && !invert) col = col.negate();
                 if (invert && !negate) col = col.negate(); // alias
                 if (grayscale || greyscale) col = col.grayscale();
@@ -81,18 +77,21 @@ export function formatColor(
                 if (opaquer) col = col.opaquer(opaquer / 100);
 
                 const { type, value } = colorToAstNode(col, format);
+                console.log(type, value);
                 stop.type = type;
                 stop.value = value;
-            } catch {
+            } catch (err) {
                 // ignore invalid stops
+                console.error(err);
             }
         }
 
         return gradientParser.stringify([gradientAst]) as ColorLike;
     }
 
-    let col = new Color(colorStr).alpha(alpha / 100);
+    let col = new Color(colorStr);
 
+    if (alpha) col = col.alpha(alpha / 100);
     if (negate && !invert) col = col.negate();
     if (invert && !negate) col = col.negate();
     if (grayscale || greyscale) col = col.grayscale();
@@ -127,7 +126,7 @@ export function dynamicElevation(color: ColorLike, elevation: number) {
                 );
                 col = col.lightness(newLightness);
 
-                const { type, value } = colorToAstNode(col, "rgb");
+                const { type, value } = colorToAstNode(col, "rgba");
                 stop.type = type;
                 stop.value = value;
             } catch {
@@ -145,7 +144,7 @@ export function dynamicElevation(color: ColorLike, elevation: number) {
     const newLightness = Math.min(lightness + elevation * increment * 100, 100);
     col = col.lightness(newLightness);
 
-    return formatSolidColor(col, "rgb");
+    return formatSolidColor(col, "rgba");
 }
 
 export function addIntermediateStops(css: string, subdivisions = 2) {
@@ -219,8 +218,6 @@ export function addIntermediateStops(css: string, subdivisions = 2) {
         }
     }
 
-    // console.log(outColors);
-
     return { colors: outColors, locations: outLocations };
 }
 
@@ -266,42 +263,28 @@ function colorToAstNode(
             const { r, g, b } = instance.rgb().object();
             return {
                 type: "rgb",
-                value: [{ value: r }, { value: g }, { value: b }],
+                value: [r, g, b],
             };
         }
         case "rgba": {
             const { r, g, b, alpha } = instance.rgb().object();
             return {
                 type: "rgba",
-                value: [
-                    { value: r },
-                    { value: g },
-                    { value: b },
-                    { value: alpha ?? 1, unit: "" },
-                ],
+                value: [r, g, b, alpha],
             };
         }
         case "hsl": {
             const { h, s, l } = instance.hsl().object();
             return {
                 type: "hsl",
-                value: [
-                    { value: h },
-                    { value: s, unit: "%" },
-                    { value: l, unit: "%" },
-                ],
+                value: [h, s, l],
             };
         }
         case "hsla": {
             const { h, s, l, alpha } = instance.hsl().object();
             return {
                 type: "hsla",
-                value: [
-                    { value: h },
-                    { value: s, unit: "%" },
-                    { value: l, unit: "%" },
-                    { value: alpha ?? 1, unit: "" },
-                ],
+                value: [h, s, l, alpha],
             };
         }
         default:

@@ -3,30 +3,29 @@ import { typographyLevels } from "./commonValues";
 
 export const baseLightTheme: Theme = {
     id: "baseLight",
-    name: "Silken Dawn",
-    description: "Default Light Theme",
+    name: "Graveglass Light",
+    description: "Pale bone gloom with bruised orchid & oxidized contrast",
     type: "light",
     mode: "normal",
     colors: {
         common: { white: "#FFFFFF", black: "#0D0F12" },
-        primary: "#5865F2", // unified accent (Discord-inspired)
-        neutral: "#444B57", // darker neutral for text & UI chrome
-        background: "#FFFFFF", // pure white for max contrast
-        surface: "#F2F3F5", // subtle separation from background
-        danger: "#D92D43", // accessible red
-        warning: "#B47F00", // richer amber for contrast
-        success: "#1F7A4D", // deeper green
-        info: "#0B6BCB", // stronger blue info
+        primary: "#7A3F86",
+        neutral: "#524A55",
+        background: "#F2EFF4",
+        surface: "#E9E2EC",
+        danger: "#B21F3D",
+        warning: "#B15A14",
+        success: "#2F7A54",
+        info: "#355A92",
     },
-
     typography: {
         levels: { ...typographyLevels },
         fontFamily: "Inter, system-ui, sans-serif",
         colors: {
-            primary: "#1C1F23", // high contrast body text
-            secondary: "#4A5260", // subdued but readable
-            accent: "#5865F2", // matches primary accent
-            muted: "#6F7A86", // improved legibility over old muted
+            primary: "#1B181F",
+            secondary: "#4C4152",
+            accent: "#7A3F86", // sync with new primary
+            muted: "#6F5D72", // dusty mauve-gray
         },
     },
 

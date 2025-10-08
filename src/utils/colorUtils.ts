@@ -146,6 +146,21 @@ export function dynamicElevation(color: ColorLike, elevation: number) {
     return formatSolidColor(col, "rgba");
 }
 
+export const extractColors = (css: string): string[] | null => {
+    if (!css) return null;
+    if (!isValidGradient(css)) return null;
+    const ast = gradientParser.parse(css)[0];
+    if (!ast || !ast.colorStops) return null;
+
+    const colors: string[] = [];
+    for (const stop of ast.colorStops) {
+        if (stop.type === "literal" || stop.type === "var") continue;
+        colors.push(serializeColorValue(stop));
+    }
+
+    return colors.length > 0 ? colors : null;
+};
+
 function formatSolidColor(
     instance: ColorInstance,
     format: OutputFormat,

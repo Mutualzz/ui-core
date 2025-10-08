@@ -217,7 +217,11 @@ export function addIntermediateStops(css: string, subdivisions = 2) {
         }
     }
 
-    return { colors: outColors, locations: outLocations };
+    return {
+        colors: outColors,
+        locations: outLocations,
+        angle: Number(node.orientation?.value) || 180,
+    };
 }
 
 function formatSolidColor(

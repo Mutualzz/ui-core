@@ -30,7 +30,7 @@ type FormatOptions = {
 export function formatColor(
     inputColor: ColorInstance | ColorLike,
     options: FormatOptions = {
-        format: "hexa",
+        format: "hex",
     },
 ): ColorLike {
     const {
@@ -146,84 +146,6 @@ export function dynamicElevation(color: ColorLike, elevation: number) {
     return formatSolidColor(col, "rgba");
 }
 
-export function addIntermediateStops(css: string, subdivisions = 2) {
-    if (!isValidGradient(css)) return null;
-    const ast = gradientParser.parse(css);
-    const node = ast.find((n) => n.type === "linear-gradient");
-    if (!node) return null;
-
-    const stops = node.colorStops.slice();
-
-    const positions: number[] = [];
-
-    if (stops.some((s: any) => s.length?.[0]?.type === "percentage")) {
-        stops.forEach((s: any, i: number) => {
-            const len = s.length?.[0];
-            positions[i] =
-                len?.type === "percentage" ? parseFloat(len.value) / 100 : NaN;
-        });
-
-        let i = 0;
-        while (i < positions.length) {
-            if (!isNaN(positions[i])) {
-                i++;
-                continue;
-            }
-            const left = i - 1;
-            let right = i + 1;
-            while (right < positions.length && isNaN(positions[right])) right++;
-            const lpos = left >= 0 ? positions[left] : 0;
-            const rpos = right < positions.length ? positions[right] : 1;
-            const span = right - left;
-            for (let k = i; k < right; k++) {
-                positions[k] = lpos + ((k - left) / span) * (rpos - lpos);
-            }
-            i = right;
-        }
-    } else {
-        const n = stops.length - 1;
-        for (let i = 0; i < stops.length; i++) positions[i] = i / n;
-    }
-
-    const outColors: string[] = [];
-    const outLocations: number[] = [];
-
-    const parseColor = (c: any) =>
-        Color(c.type === "hex" ? `#${c.value}` : c.value);
-
-    const push = (pos: number, col: ColorInstance) => {
-        const css = col.rgb().string();
-
-        if (
-            outLocations.length === 0 ||
-            Math.abs(outLocations[outLocations.length - 1] - pos) > 1e-6
-        ) {
-            outColors.push(css);
-            outLocations.push(+pos.toFixed(6));
-        }
-    };
-
-    for (let i = 0; i < stops.length - 1; i++) {
-        const ca = parseColor(stops[i]);
-        const cb = parseColor(stops[i + 1]);
-        const pa = positions[i],
-            pb = positions[i + 1];
-
-        for (let s = 0; s <= subdivisions + 1; s++) {
-            const t = s / (subdivisions + 1);
-            const pos = pa + (pb - pa) * t;
-            const c = ca.mix(cb, t);
-            push(pos, c);
-        }
-    }
-
-    return {
-        colors: outColors,
-        locations: outLocations,
-        angle: Number(node.orientation?.value) || 180,
-    };
-}
-
 function formatSolidColor(
     instance: ColorInstance,
     format: OutputFormat,
@@ -295,7 +217,7 @@ function colorToAstNode(
     }
 }
 
-function serializeColorValue(node: any): string {
+export function serializeColorValue(node: any): string {
     switch (node.type) {
         case "hex":
             return `#${node.value}`;

@@ -48,7 +48,6 @@ export const useColorInput = <T = ColorLike>(
             let parsed = null;
             try {
                 parsed = new Color(trimmed);
-                console.log("parsed", parsed);
             } catch {
                 setIsInvalid(true);
                 return;

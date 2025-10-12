@@ -1,7 +1,9 @@
+import type { Theme } from "@emotion/react";
 import type { ColorLike } from "@ui-types";
 import Color, { type ColorInstance } from "color";
 import gradientParser from "gradient-parser";
 import { isValidGradient } from "./colorRegex";
+import { randomColor, randomHexColor } from "./randomColor";
 
 type OutputFormat = "hex" | "hexa" | "rgb" | "rgba" | "hsl" | "hsla";
 
@@ -82,29 +84,42 @@ export function formatColor(
             } catch (err) {
                 // ignore invalid stops
                 console.error(err);
+                continue;
             }
         }
 
         return gradientParser.stringify([gradientAst]) as ColorLike;
     }
 
-    let col = new Color(colorStr);
+    try {
+        let col = new Color(colorStr);
 
-    if (alpha) col = col.alpha(alpha / 100);
-    if (negate && !invert) col = col.negate();
-    if (invert && !negate) col = col.negate();
-    if (grayscale || greyscale) col = col.grayscale();
-    if (lighten) col = col.lighten(lighten / 100);
-    if (darken) col = col.darken(darken / 100);
-    if (lightness) col = col.lightness(lightness);
-    if (saturate) col = col.saturate(saturate / 100);
-    if (desaturate) col = col.desaturate(desaturate / 100);
-    if (whiten) col = col.whiten(whiten / 100);
-    if (blacken) col = col.blacken(blacken / 100);
-    if (fade) col = col.fade(fade / 100);
-    if (opaquer) col = col.opaquer(opaquer / 100);
+        if (alpha) col = col.alpha(alpha / 100);
+        if (negate && !invert) col = col.negate();
+        if (invert && !negate) col = col.negate();
+        if (grayscale || greyscale) col = col.grayscale();
+        if (lighten) col = col.lighten(lighten / 100);
+        if (darken) col = col.darken(darken / 100);
+        if (lightness) col = col.lightness(lightness);
+        if (saturate) col = col.saturate(saturate / 100);
+        if (desaturate) col = col.desaturate(desaturate / 100);
+        if (whiten) col = col.whiten(whiten / 100);
+        if (blacken) col = col.blacken(blacken / 100);
+        if (fade) col = col.fade(fade / 100);
+        if (opaquer) col = col.opaquer(opaquer / 100);
 
-    return formatSolidColor(col, format) as ColorLike;
+        return formatSolidColor(col, format) as ColorLike;
+    } catch {
+        return new Color(randomHexColor()).hex() as ColorLike;
+    }
+}
+
+export function createColor(color: ColorLike, theme?: Theme): ColorInstance {
+    try {
+        return new Color(color);
+    } catch {
+        return new Color(theme?.colors.neutral || randomColor());
+    }
 }
 
 export function dynamicElevation(color: ColorLike, elevation: number) {

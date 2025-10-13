@@ -6,7 +6,7 @@ export const baseLightTheme: Theme = {
     name: "Graveglass Light",
     description: "Pale bone gloom with bruised orchid & oxidized contrast",
     type: "light",
-    mode: "normal",
+    style: "normal",
     colors: {
         common: { white: "#FFFFFF", black: "#0D0F12" },
         primary: "#7A3F86",

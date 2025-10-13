@@ -68,7 +68,8 @@ export type Breakpoint = "xs" | "sm" | "md" | "lg" | "xl";
 export type Spacing = "xs" | "sm" | "md" | "lg" | "xl";
 
 export type Responsive<T> = T | Partial<Record<Breakpoint, T>>;
-export type ThemeMode = "light" | "dark" | "system";
+export type ThemeType = "light" | "dark" | "system";
+export type ThemeStyle = "normal" | "gradient";
 
 export type AllowNumber<T> = T | number;
 
@@ -115,8 +116,8 @@ export interface MZTheme {
     id: string;
     name: string;
     description: string;
-    type: "light" | "dark";
-    mode: "normal" | "gradient";
+    type: Omit<ThemeType, "system">;
+    style: ThemeStyle;
     colors: {
         common: {
             white: ColorLike;

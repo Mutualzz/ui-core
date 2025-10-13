@@ -122,7 +122,10 @@ export function createColor(color: ColorLike, theme?: Theme): ColorInstance {
     }
 }
 
-export function dynamicElevation(color: ColorLike, elevation: number) {
+export function dynamicElevation(
+    color: ColorLike,
+    elevation: number,
+): ColorLike {
     if (isValidGradient(color)) {
         const gradientAst = gradientParser.parse(color)[0];
 
@@ -148,7 +151,7 @@ export function dynamicElevation(color: ColorLike, elevation: number) {
             }
         }
 
-        return gradientParser.stringify([gradientAst]);
+        return gradientParser.stringify([gradientAst]) as ColorLike;
     }
 
     let col = new Color(color);
@@ -161,13 +164,13 @@ export function dynamicElevation(color: ColorLike, elevation: number) {
     return formatSolidColor(col, "rgba");
 }
 
-export const extractColors = (css: string): string[] | null => {
+export const extractColors = (css: ColorLike): ColorLike[] | null => {
     if (!css) return null;
     if (!isValidGradient(css)) return null;
     const ast = gradientParser.parse(css)[0];
     if (!ast || !ast.colorStops) return null;
 
-    const colors: string[] = [];
+    const colors: ColorLike[] = [];
     for (const stop of ast.colorStops) {
         if (stop.type === "literal" || stop.type === "var") continue;
         colors.push(serializeColorValue(stop));
@@ -179,20 +182,20 @@ export const extractColors = (css: string): string[] | null => {
 function formatSolidColor(
     instance: ColorInstance,
     format: OutputFormat,
-): string {
+): ColorLike {
     switch (format) {
         case "hex":
-            return instance.hex();
+            return instance.hex() as ColorLike;
         case "hexa":
-            return instance.hexa();
+            return instance.hexa() as ColorLike;
         case "rgb":
         case "rgba":
-            return instance.rgb().string();
+            return instance.rgb().string() as ColorLike;
         case "hsl":
         case "hsla":
-            return instance.hsl().string();
+            return instance.hsl().string() as ColorLike;
         default:
-            return instance.string();
+            return instance.string() as ColorLike;
     }
 }
 
@@ -247,7 +250,7 @@ function colorToAstNode(
     }
 }
 
-export function serializeColorValue(node: any): string {
+export function serializeColorValue(node: any): ColorLike {
     switch (node.type) {
         case "hex":
             return `#${node.value}`;
@@ -259,8 +262,8 @@ export function serializeColorValue(node: any): string {
         case "hsla":
             return `${node.type}(${node.value
                 .map((c: any) => (c.unit ? `${c.value}${c.unit}` : c.value))
-                .join(", ")})`;
+                .join(", ")})` as ColorLike;
         default:
-            return "";
+            return "" as ColorLike;
     }
 }

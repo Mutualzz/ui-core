@@ -6,7 +6,7 @@
     },
     "devDependencies": {
         "@types/gradient-parser": "^1.1.0",
-        "bunchee": "^6.6.0"
+        "bunchee": "^6.6.2"
     },
     "exports": {
         ".": {

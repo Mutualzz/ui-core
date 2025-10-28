@@ -16,6 +16,13 @@ export type HSLA = `hsla(${number}, ${number}%, ${number}%, ${number})`;
 export type HSV = `hsv(${number}, ${number}%, ${number}%)`;
 export type HSVA = `hsva(${number}, ${number}%, ${number}%, ${number})`;
 
+export type HSVObject = {
+    h: number;
+    s: number;
+    v: number;
+    a?: number;
+};
+
 export type LinearGradient = `linear-gradient(${string})`;
 export type RadialGradient = `radial-gradient(${string})`;
 export type ConicGradient = `conic-gradient(${string})`;

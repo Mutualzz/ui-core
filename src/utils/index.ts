@@ -94,12 +94,12 @@ export const isCssMarker = (
 export * from "./colorRegex";
 export * from "./colorUtils";
 export * from "./getReactElementRef";
+export * from "./getRelativePosition";
 export * from "./number";
 export * from "./randomColor";
 export * from "./resolveColors";
 export * from "./resolveSize";
 export * from "./responsive";
 export * from "./setRef";
-export * from "./useEnhancedEffect";
-export * from "./useForkRef";
+export * from "./touch";
 export * from "./visuallyHidden";

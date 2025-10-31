@@ -1,14 +1,34 @@
 import type { Theme } from "@emotion/react";
-import type { ColorLike } from "@ui-types";
+import type {
+    ColorLike,
+    ColorResult,
+    Hex,
+    HslaColor,
+    HslColor,
+    HsvaColor,
+    HsvColor,
+    ObjectColor,
+    RgbaColor,
+    RgbColor,
+    XYColor,
+} from "@ui-types";
 import Color, { type ColorInstance } from "color";
 import gradientParser from "gradient-parser";
-import { isValidGradient } from "./colorRegex";
+import { isValidGradient, isValidHex } from "./colorRegex";
 import { randomColor, randomHexColor } from "./randomColor";
 
-type OutputFormat = "hex" | "hexa" | "rgb" | "rgba" | "hsl" | "hsla";
+type OutputFormat =
+    | "hex"
+    | "hexa"
+    | "rgb"
+    | "rgba"
+    | "hsl"
+    | "hsla"
+    | "hsv"
+    | "hsva";
 
 type FormatOptions = {
-    format: OutputFormat;
+    format?: OutputFormat;
     alpha?: number; // 0-100
 
     // modifiers
@@ -30,14 +50,12 @@ type FormatOptions = {
 };
 
 export function formatColor(
-    inputColor: ColorInstance | ColorLike,
-    options: FormatOptions = {
-        format: "hex",
-    },
+    inputColor: ColorInstance | ColorLike | ObjectColor,
+    options: FormatOptions,
 ): ColorLike {
     const {
         alpha,
-        format,
+        format = "hex",
         negate,
         invert,
         grayscale,
@@ -52,8 +70,13 @@ export function formatColor(
         fade,
         opaquer,
     } = options;
+
     const colorStr =
-        typeof inputColor === "string" ? inputColor : inputColor.string();
+        typeof inputColor === "string"
+            ? inputColor
+            : isColorInstance(inputColor)
+              ? inputColor.string()
+              : new Color(inputColor).string();
 
     if (isValidGradient(colorStr)) {
         const gradientAst = gradientParser.parse(colorStr)[0];
@@ -114,13 +137,48 @@ export function formatColor(
     }
 }
 
-export function createColor(color: ColorLike, theme?: Theme): ColorInstance {
+function isColorInstance(value: any): value is ColorInstance {
+    return value != null && typeof (value as any).string === "function";
+}
+
+export function createColor(color?: ColorLike, theme?: Theme): ColorInstance {
+    if (!color) return Color(theme?.colors.neutral) || randomColor();
     try {
         return new Color(color);
     } catch {
         return new Color(theme?.colors.neutral || randomColor());
     }
 }
+
+export const handleColor = (str: string | HsvaColor): ColorResult => {
+    let rgb!: RgbColor;
+    let hsl!: HslColor;
+    let hsv!: HsvColor;
+    let rgba!: RgbaColor;
+    let hsla!: HslaColor;
+    let hsva!: HsvaColor;
+    let xy!: XYColor;
+    let hex!: Hex;
+    let hexa!: Hex;
+    if (typeof str === "string" && isValidHex(str)) {
+        hsva = new Color(str).hsv().object() as unknown as HsvaColor;
+        hex = str as Hex;
+    } else if (typeof str !== "string") {
+        hsva = str;
+    }
+    if (hsva) {
+        const color = new Color(hsva);
+        hsv = color.hsv().object() as unknown as HsvColor;
+        hsla = color.hsl().object() as unknown as HslaColor;
+        rgba = color.rgb().object() as unknown as RgbaColor;
+        hexa = color.hexa() as Hex;
+        hex = color.hex() as Hex;
+        hsl = color.hsl().object() as unknown as HslColor;
+        rgb = color.rgb().object() as unknown as RgbColor;
+        xy = color.xyz().object() as unknown as XYColor;
+    }
+    return { rgb, hsl, hsv, rgba, hsla, hsva, hex, hexa, xy };
+};
 
 export function dynamicElevation(
     color: ColorLike,
@@ -179,6 +237,25 @@ export const extractColors = (css: ColorLike): ColorLike[] | null => {
     return colors.length > 0 ? colors : null;
 };
 
+export const constructLinearGradient = (
+    orientation: number,
+    colors: Hex[],
+): ColorLike => {
+    return gradientParser.stringify([
+        {
+            type: "linear-gradient",
+            orientation: {
+                type: "angular",
+                value: orientation.toString(),
+            },
+            colorStops: colors.map((hex) => ({
+                type: "hex",
+                value: hex.replace("#", ""),
+            })),
+        },
+    ]) as ColorLike;
+};
+
 function formatSolidColor(
     instance: ColorInstance,
     format: OutputFormat,
@@ -194,6 +271,9 @@ function formatSolidColor(
         case "hsl":
         case "hsla":
             return instance.hsl().string() as ColorLike;
+        case "hsv":
+        case "hsva":
+            return instance.hsv().string() as ColorLike;
         default:
             return instance.string() as ColorLike;
     }

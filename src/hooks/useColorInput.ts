@@ -1,6 +1,6 @@
 import type {
+    ColorFormat,
     ColorLike,
-    ColorType,
     Hex,
     HSL,
     HSLA,
@@ -24,7 +24,7 @@ import { useState } from "react";
 export const useColorInput = <T = ColorLike>(
     initialColor = randomColor(),
     alpha = 100,
-    type: ColorType = "hex",
+    type: ColorFormat = "hex",
     allowGradient = false,
 ) => {
     const [inputValue, setInputValue] = useState<ColorLike>(initialColor);

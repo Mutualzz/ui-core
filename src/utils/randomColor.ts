@@ -1,9 +1,11 @@
 import type {
+    ColorFormat,
     ColorLike,
-    ColorType,
     Hex,
     HSL,
     HSLA,
+    HSV,
+    HSVA,
     RGB,
     RGBA,
 } from "@ui-types";
@@ -29,10 +31,35 @@ export const randomHexColor = (alpha?: number): Hex => {
             .toString(16)
             .padStart(2, "0")
             .toUpperCase();
+
         hex = `${hex}${alphaHex}` as Hex;
     }
 
     return hex;
+};
+
+/**
+ * Generate a random HSV color
+ * @param alpha - Alpha value between 0 and 1 (optional)
+ * @returns {HSV | HSVA} Random HSV color
+ */
+export const randomHsvColor = (alpha?: number): HSV | HSVA => {
+    const array = new Uint8Array(3);
+    crypto.getRandomValues(array);
+
+    // Hue: 0-360 degrees
+    const h = Math.round((array[0] / 255) * 360);
+    // Saturation: 20-100% (avoid too desaturated colors)
+    const s = Math.round(20 + (array[1] / 255) * 80);
+    // Value/Brightness: 20-100% (avoid too dark colors)
+    const v = Math.round(20 + (array[2] / 255) * 80);
+
+    if (alpha && alpha !== 100) {
+        const clampedAlpha = Math.max(0, Math.min(1, alpha));
+        return `hsva(${h}, ${s}%, ${v}%, ${clampedAlpha})`;
+    }
+
+    return `hsv(${h}, ${s}%, ${v}%)`;
 };
 
 /**
@@ -140,7 +167,7 @@ export const randomGradient = (
  */
 export const randomColor = (
     type:
-        | ColorType
+        | ColorFormat
         | "linear-gradient"
         | "radial-gradient"
         | "conic-gradient" = "hex",
@@ -153,6 +180,8 @@ export const randomColor = (
             return randomRgbColor(alpha);
         case "hsl":
             return randomHslColor(alpha);
+        case "hsv":
+            return randomHsvColor(alpha);
         case "linear-gradient":
             return randomLinearGradient();
         case "radial-gradient":

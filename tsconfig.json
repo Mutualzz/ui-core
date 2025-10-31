@@ -2,8 +2,7 @@
     "compilerOptions": {
         "target": "es2024",
         "module": "ESNext",
-        "declaration": true,
-        "declarationDir": "dist",
+        "declaration": false,
         "emitDeclarationOnly": false,
         "outDir": "dist",
         "moduleResolution": "node",
@@ -14,6 +13,7 @@
         "skipDefaultLibCheck": true,
         "strict": true,
         "jsx": "react-jsx",
+        "jsxImportSource": "@emotion/react",
         "baseUrl": "./src",
         "paths": {
             "@utils": ["utils/index"],

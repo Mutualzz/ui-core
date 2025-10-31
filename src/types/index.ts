@@ -16,12 +16,59 @@ export type HSLA = `hsla(${number}, ${number}%, ${number}%, ${number})`;
 export type HSV = `hsv(${number}, ${number}%, ${number}%)`;
 export type HSVA = `hsva(${number}, ${number}%, ${number}%, ${number})`;
 
-export type HSVObject = {
+export interface HsvColor {
     h: number;
     s: number;
     v: number;
-    a?: number;
+}
+
+export interface HsvaColor extends HsvColor {
+    alpha: number;
+}
+
+export interface HslColor {
+    h: number;
+    s: number;
+    l: number;
+}
+export interface HslaColor extends HslColor {
+    alpha: number;
+}
+
+export interface RgbColor {
+    r: number;
+    g: number;
+    b: number;
+}
+export interface RgbaColor extends RgbColor {
+    alpha: number;
+}
+
+export interface XYColor {
+    x: number;
+    y: number;
+    bri?: number;
+}
+
+export type ColorResult = {
+    rgb: RgbColor;
+    hsl: HslColor;
+    hsv: HsvColor;
+    rgba: RgbaColor;
+    hsla: HslaColor;
+    hsva: HsvaColor;
+    xy: XYColor;
+    hex: Hex;
+    hexa: Hex;
 };
+
+export type ObjectColor =
+    | RgbColor
+    | HslColor
+    | HsvColor
+    | RgbaColor
+    | HslaColor
+    | HsvaColor;
 
 export type LinearGradient = `linear-gradient(${string})`;
 export type RadialGradient = `radial-gradient(${string})`;
@@ -29,9 +76,9 @@ export type ConicGradient = `conic-gradient(${string})`;
 
 export type Gradient = LinearGradient | RadialGradient | ConicGradient;
 
-export type ColorLike = Hex | RGB | RGBA | HSL | HSLA | Gradient;
+export type ColorLike = Hex | RGB | RGBA | HSL | HSLA | HSV | HSVA | Gradient;
 
-export type ColorType = "hex" | "rgb" | "hsl";
+export type ColorFormat = "hex" | "rgb" | "hsl" | "hsv";
 
 export type AnyObj = Record<string, any>;
 
@@ -69,6 +116,15 @@ export interface TypographyLevelObj {
     lineHeight: string | number;
     fontWeight: string | number;
     letterSpacing: string | number;
+}
+
+export interface Interaction {
+    left: number;
+    top: number;
+    width: number;
+    height: number;
+    x: number;
+    y: number;
 }
 
 export type Size = "sm" | "md" | "lg";

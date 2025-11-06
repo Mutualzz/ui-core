@@ -5,6 +5,7 @@ export const baseDarkTheme: Theme = {
     id: "baseDark",
     name: "Cathedral Void",
     description: "Velvet void with spectral indigo & corroded metallic veins",
+    adaptive: false,
     type: "dark",
     style: "normal",
     colors: {

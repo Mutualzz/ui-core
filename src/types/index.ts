@@ -181,6 +181,7 @@ export interface MZTheme {
     id: string;
     name: string;
     description: string;
+    adaptive: boolean;
     type: Omit<ThemeType, "system">;
     style: ThemeStyle;
     colors: {

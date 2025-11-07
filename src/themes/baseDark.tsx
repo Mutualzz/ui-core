@@ -11,8 +11,8 @@ export const baseDarkTheme: Theme = {
     style: "normal",
     colors: {
         common: { white: "#F9F6F9", black: "#0B0710" },
-        primary: "#8B3FA5",
-        neutral: "#7A7078",
+        primary: "#88449a",
+        neutral: "#ddceda",
         background: "#0D0710",
         surface: "#241927",
         danger: "#B63B44",

@@ -12,7 +12,7 @@ export const baseLightTheme: Theme = {
     colors: {
         common: { white: "#FFFFFF", black: "#0D0F12" },
         primary: "#8A2E6C",
-        neutral: "#5A5059",
+        neutral: "#a891a6",
         background: "#FBF7FB",
         surface: "#F4EAF2",
         danger: "#B21F3D",

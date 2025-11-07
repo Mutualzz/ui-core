@@ -3,31 +3,32 @@ import { typographyLevels } from "./commonValues";
 
 export const baseDarkTheme: Theme = {
     id: "baseDark",
-    name: "Cathedral Void",
-    description: "Velvet void with spectral indigo & corroded metallic veins",
+    name: "Velvet Nocturne",
+    description:
+        "Velvet plum nights with cool teal accents and worn leather edges",
     adaptive: false,
     type: "dark",
     style: "normal",
     colors: {
-        common: { white: "#F2F3F5", black: "#07090B" },
-        primary: "#6A5AD4",
-        neutral: "#959AA8",
-        background: "#0B0D11",
-        surface: "#181B23",
-        danger: "#A83244",
-        warning: "#8F6A26",
-        success: "#317257",
-        info: "#436CA9",
+        common: { white: "#F9F6F9", black: "#0B0710" },
+        primary: "#8B3FA5",
+        neutral: "#7A7078",
+        background: "#0D0710",
+        surface: "#241927",
+        danger: "#B63B44",
+        warning: "#A0652A",
+        success: "#2F7A54",
+        info: "#4EDFD3",
     },
 
     typography: {
         levels: { ...typographyLevels },
-        fontFamily: "Inter, system-ui, sans-serif",
+        fontFamily: "'Rubik', 'Inter', system-ui, sans-serif",
         colors: {
-            primary: "#E6E7EA",
-            secondary: "#C3C7CF",
-            accent: "#6A5AD4",
-            muted: "#828894",
+            primary: "#FFF7FB",
+            secondary: "#D9CFE0",
+            accent: "#00D1C1",
+            muted: "#8B8088",
         },
     },
 

@@ -3,30 +3,31 @@ import { typographyLevels } from "./commonValues";
 
 export const baseLightTheme: Theme = {
     id: "baseLight",
-    name: "Graveglass Light",
-    description: "Pale bone gloom with bruised orchid & oxidized contrast",
+    name: "Moonlit Ash",
+    description:
+        "Washed ash with bruised orchid highlights and cool teal undertones",
     adaptive: false,
     type: "light",
     style: "normal",
     colors: {
         common: { white: "#FFFFFF", black: "#0D0F12" },
-        primary: "#7A3F86",
-        neutral: "#524A55",
-        background: "#F2EFF4",
-        surface: "#E9E2EC",
+        primary: "#8A2E6C",
+        neutral: "#5A5059",
+        background: "#FBF7FB",
+        surface: "#F4EAF2",
         danger: "#B21F3D",
         warning: "#B15A14",
         success: "#2F7A54",
-        info: "#355A92",
+        info: "#3FB8AD",
     },
     typography: {
         levels: { ...typographyLevels },
-        fontFamily: "Inter, system-ui, sans-serif",
+        fontFamily: "'Rubik', 'Inter', system-ui, sans-serif",
         colors: {
-            primary: "#1B181F",
-            secondary: "#4C4152",
-            accent: "#7A3F86", // sync with new primary
-            muted: "#6F5D72", // dusty mauve-gray
+            primary: "#22161F",
+            secondary: "#6C5D69",
+            accent: "#00D1C1",
+            muted: "#8A7283",
         },
     },
 

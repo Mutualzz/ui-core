@@ -1,16 +1,28 @@
 import type { Theme } from "@emotion/react";
 import type { Breakpoint } from "@ui-types";
-import { aliasMaps } from "./aliases";
+import { aliasMaps, spacingAliasMap } from "./aliases";
+
+const spacingKeys = Object.keys(spacingAliasMap);
 
 export function aliasToStyles(props: Record<string, any>, theme: Theme) {
     const output: Record<string, any> = {};
 
     const resolveValue = (key: string, raw: any) => {
         if (raw == null) return raw;
-        // NOTE - For now we are not going to be using the theme.spacing function
-        /*if (/^[mp]/.test(key) && typeof raw === "number") {
+
+        if (spacingKeys.includes(key) && typeof raw === "number") {
             return theme.spacing(raw);
-        }*/
+        }
+
+        if (
+            (key === "top" ||
+                key === "right" ||
+                key === "bottom" ||
+                key === "left") &&
+            typeof raw === "number"
+        ) {
+            return theme.spacing(raw);
+        }
 
         if (key === "boxShadow" && typeof raw === "number") {
             return theme.shadows[raw] ?? raw;

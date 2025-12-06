@@ -85,9 +85,9 @@ export const baseLightTheme: Theme = {
 
     zIndex: {
         mobileStepper: 1000,
-        fab: 1050,
         speedDial: 1050,
         appBar: 1100,
+        fab: 1150,
         modal: 1200,
         drawer: 1300,
         snackbar: 1400,

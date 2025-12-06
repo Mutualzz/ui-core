@@ -183,6 +183,7 @@ export const handleColor = (str: string | HsvaColor): ColorResult => {
 export function dynamicElevation(
     color: ColorLike,
     elevation: number,
+    format: OutputFormat = "rgba",
 ): ColorLike {
     if (isValidGradient(color)) {
         const gradientAst = gradientParser.parse(color)[0];
@@ -219,7 +220,7 @@ export function dynamicElevation(
     const newLightness = Math.min(lightness + elevation * increment * 100, 100);
     col = col.lightness(newLightness);
 
-    return formatSolidColor(col, "rgba");
+    return formatSolidColor(col, format);
 }
 
 export const extractColors = (css: ColorLike): ColorLike[] | null => {

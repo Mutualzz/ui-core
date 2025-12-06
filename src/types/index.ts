@@ -1,3 +1,4 @@
+import type { CSSObject } from "@emotion/react";
 import type { HTMLAttributes } from "react";
 import type { HTMLBorderProps } from "./Border.props";
 import type { HTMLDisplayProps } from "./Display.props";
@@ -133,7 +134,7 @@ export type Breakpoint = "xs" | "sm" | "md" | "lg" | "xl";
 export type Spacing = "xs" | "sm" | "md" | "lg" | "xl";
 
 export type Responsive<T> = T | Partial<Record<Breakpoint, T>>;
-export type ThemeType = "light" | "dark" | "system";
+export type ThemeType = "light" | "dark";
 export type ThemeStyle = "normal" | "gradient";
 
 export type AllowNumber<T> = T | number;
@@ -147,7 +148,7 @@ export type SystemProps<T = HTMLElement> = HTMLAttributes<T> &
     HTMLShadowsProps &
     HTMLSizingProps &
     HTMLSpacingProps &
-    HTMLTypographyProps;
+    HTMLTypographyProps & { css?: CSSObject };
 
 export type Px = `${number}px`;
 export type Rem = `${number}rem`;
@@ -182,7 +183,7 @@ export interface MZTheme {
     name: string;
     description: string;
     adaptive: boolean;
-    type: Omit<ThemeType, "system">;
+    type: ThemeType;
     style: ThemeStyle;
     colors: {
         common: {
@@ -221,6 +222,7 @@ export interface MZTheme {
         only: (key: Breakpoint) => string;
         not: (key: Breakpoint) => string;
     };
+
     spacing: (factor: number) => string;
 
     shadows: string[];

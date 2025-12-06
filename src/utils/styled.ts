@@ -9,19 +9,19 @@ import type { SxProps } from "./sxToCss";
 import { sxToCss } from "./sxToCss";
 import { systemToCss } from "./systemToCss";
 
-const blockedProps = ["sx", "as", "theme", ...Object.keys(aliasMaps)];
+export const blockedProps = ["sx", "as", "theme", ...Object.keys(aliasMaps)];
 
 // don’t forward sx, theme, as, or any of your system-prop keys
-const shouldForwardProp = (prop: string) =>
+export const shouldForwardProp = (prop: string) =>
     isPropValid(prop) && !blockedProps.includes(prop);
 
 // what the consumer sees (no theme in their props)
-type PublicProps<P> = P & { sx?: SxProps; theme?: Theme };
+export type PublicProps<P> = P & { sx?: SxProps; theme?: Theme };
 
 // what your style callbacks receive (adds theme)
-type CallbackProps<P> = PublicProps<P> & { theme: Theme };
+export type CallbackProps<P> = PublicProps<P> & { theme: Theme };
 
-interface StyledWithSxInterface {
+export interface StyledWithSxInterface {
     <Tag extends keyof JSX.IntrinsicElements>(
         tag: Tag,
         options?: StyledOptions,
@@ -49,7 +49,7 @@ interface StyledWithSxInterface {
     ) => ComponentType<PublicProps<ComponentPropsWithRef<Component> & Props>>;
 }
 
-type StyledWithSx = StyledWithSxInterface & typeof styledBase;
+export type StyledWithSx = StyledWithSxInterface & typeof styledBase;
 
 const styled = new Proxy(styledBase, {
     apply(_target, _thisArg, [component, options]: any) {

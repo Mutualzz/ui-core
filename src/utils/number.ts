@@ -9,3 +9,5 @@ export const round = (
 ): number => {
     return Math.round(base * number) / base;
 };
+
+export const flipNumber = (num: number) => 100 - clamp(num, 0, 100);

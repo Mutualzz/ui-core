@@ -107,7 +107,6 @@ export function formatColor(
             } catch (err) {
                 // ignore invalid stops
                 console.error(err);
-                continue;
             }
         }
 
@@ -183,7 +182,7 @@ export const handleColor = (str: string | HsvaColor): ColorResult => {
 export function dynamicElevation(
     color: ColorLike,
     elevation: number,
-    format: OutputFormat = "rgba",
+    format: OutputFormat = "hex",
 ): ColorLike {
     if (isValidGradient(color)) {
         const gradientAst = gradientParser.parse(color)[0];
@@ -192,9 +191,9 @@ export function dynamicElevation(
             try {
                 if (stop.type === "literal" || stop.type === "var") continue;
 
-                let col = new Color(serializeColorValue(stop.value));
+                let col = new Color(serializeColorValue(stop));
 
-                const increment = 0.02;
+                const increment = 0.01;
                 const lightness = col.lightness();
                 const newLightness = Math.min(
                     lightness + elevation * increment * 100,
@@ -202,11 +201,12 @@ export function dynamicElevation(
                 );
                 col = col.lightness(newLightness);
 
-                const { type, value } = colorToAstNode(col, "rgba");
+                const { type, value } = colorToAstNode(col, format);
                 stop.type = type;
                 stop.value = value;
-            } catch {
+            } catch (err: any) {
                 // ignore invalid stops
+                console.error(err.stack);
             }
         }
 
@@ -291,7 +291,7 @@ function colorToAstNode(
 ): AstNode {
     switch (format) {
         case "hex": {
-            const hex = instance.hex().replace(/^#/, "");
+            const hex = instance.hex().replace(/^#/g, "");
             return { type: "hex", value: hex };
         }
         case "hexa": {

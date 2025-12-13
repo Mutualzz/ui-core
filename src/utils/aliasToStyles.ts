@@ -3,6 +3,7 @@ import type { Breakpoint } from "@ui-types";
 import { aliasMaps, spacingAliasMap } from "./aliases";
 
 const spacingKeys = Object.keys(spacingAliasMap);
+const positionKeys = ["top", "right", "bottom", "left"];
 
 export function aliasToStyles(props: Record<string, any>, theme: Theme) {
     const output: Record<string, any> = {};
@@ -14,23 +15,16 @@ export function aliasToStyles(props: Record<string, any>, theme: Theme) {
             return theme.spacing(raw);
         }
 
-        if (
-            (key === "top" ||
-                key === "right" ||
-                key === "bottom" ||
-                key === "left") &&
-            typeof raw === "number"
-        ) {
+        if (positionKeys.includes(key) && typeof raw === "number") {
             return theme.spacing(raw);
         }
 
         if (key === "boxShadow" && typeof raw === "number") {
-            return theme.shadows[raw] ?? raw;
+            return theme.shadows[raw] || raw;
         }
 
         if (key === "zIndex" && typeof raw === "string") {
-            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-            return theme.zIndex[raw as keyof typeof theme.zIndex] ?? raw;
+            return theme.zIndex[raw as keyof typeof theme.zIndex] || raw;
         }
 
         return raw;
@@ -102,6 +96,7 @@ export function aliasToStyles(props: Record<string, any>, theme: Theme) {
             }
         } else {
             const resolved = resolveValue(key, raw);
+
             cssProps.forEach((prop) => {
                 output[prop] = resolved;
             });

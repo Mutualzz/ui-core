@@ -15,12 +15,6 @@ export interface HTMLBorderProps {
     >;
     borderTopWidth?: Responsive<AllowNumber<Properties["borderTopWidth"]>>;
     borderTopStyle?: Responsive<Properties["borderTopStyle"]>;
-    borderTopRadius?: Responsive<
-        AllowNumber<
-            | Properties["borderTopLeftRadius"]
-            | Properties["borderTopRightRadius"]
-        >
-    >;
     borderTopLeftRadius?: Responsive<
         AllowNumber<Properties["borderTopLeftRadius"]>
     >;
@@ -34,6 +28,7 @@ export interface HTMLBorderProps {
     >;
     borderRightWidth?: Responsive<AllowNumber<Properties["borderRightWidth"]>>;
     borderRightStyle?: Responsive<Properties["borderRightStyle"]>;
+
     borderBottom?: Responsive<AllowNumber<Properties["borderBottom"]>>;
     borderBottomColor?: Responsive<
         Color | ColorLike | Properties["borderBottomColor"]
@@ -42,6 +37,13 @@ export interface HTMLBorderProps {
         AllowNumber<Properties["borderBottomWidth"]>
     >;
     borderBottomStyle?: Responsive<Properties["borderBottomStyle"]>;
+    borderBottomLeftRadius?: Responsive<
+        AllowNumber<Properties["borderBottomLeftRadius"]>
+    >;
+    borderBottomRightRadius?: Responsive<
+        AllowNumber<Properties["borderBottomRightRadius"]>
+    >;
+
     borderLeft?: Responsive<AllowNumber<Properties["borderLeft"]>>;
     borderLeftColor?: Responsive<
         Color | ColorLike | Properties["borderLeftColor"]

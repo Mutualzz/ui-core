@@ -41,12 +41,10 @@ export const borderStyleAliasMap = {
 
 export const borderRadiusAliasMap = {
     borderRadius: ["borderRadius"],
-    borderTopRadius: ["borderTopRadius"],
-    borderRightRadius: ["borderRightRadius"],
-    borderBottomRadius: ["borderBottomRadius"],
-    borderLeftRadius: ["borderLeftRadius"],
-    borderXRadius: ["borderLeftRadius", "borderRightRadius"],
-    borderYRadius: ["borderTopRadius", "borderBottomRadius"],
+    borderTopLeftRadius: ["borderTopLeftRadius"],
+    borderTopRightRadius: ["borderTopRightRadius"],
+    borderBottomLeftRadius: ["borderBottomLeftRadius"],
+    borderBottomRightRadius: ["borderBottomRightRadius"],
 } as const;
 
 // Display shorthands
@@ -94,7 +92,7 @@ export const paletteAliasMap = {
 
     backgroundColor: ["backgroundColor"],
     bgColor: ["backgroundColor"],
-} as const; 
+} as const;
 */
 
 // Position shorthands

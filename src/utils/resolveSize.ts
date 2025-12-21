@@ -1,5 +1,5 @@
 import type { Theme } from "@emotion/react";
-import type { Size, SizeValue } from "@ui-types";
+import type { Size, SizeValue, TypographyLevel } from "@ui-types";
 
 export const cssUnitRegex =
     /^(-?\d*\.?\d+)(px|rem|em|%|vh|vw|vmin|vmax|pt|fr)$/i;
@@ -23,11 +23,21 @@ export const isNumberSize = (
     return typeof size === "number";
 };
 
-export const resolveSize = (
+export function resolveSize(
+    theme: Theme,
+    size: Size | SizeValue | number,
+    map: Record<Size, TypographyLevel>,
+): string;
+export function resolveSize(
     theme: Theme,
     size: Size | SizeValue | number,
     map: Record<Size, number>,
-) => {
+): number;
+export function resolveSize(
+    theme: Theme,
+    size: Size | SizeValue | number,
+    map: Record<Size, TypographyLevel | number>,
+): string | number {
     // If size is just a number, return it directly
     if (isNumberSize(size)) return size;
 
@@ -56,4 +66,4 @@ export const resolveSize = (
     }
 
     return map.md; // Default to medium size if nothing matches
-};
+}

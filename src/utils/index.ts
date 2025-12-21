@@ -35,7 +35,7 @@ export const normalizeTypography = (level: TypographyLevelObj) => {
             : level.letterSpacing;
 
     const fontWeight =
-        typeof level.fontWeight === "number"
+        typeof level.fontWeight === "string"
             ? String(level.fontWeight)
             : level.fontWeight;
 
@@ -101,5 +101,6 @@ export * from "./resolveColors";
 export * from "./resolveSize";
 export * from "./responsive";
 export * from "./setRef";
+export * from "./spacing";
 export * from "./touch";
 export * from "./visuallyHidden";

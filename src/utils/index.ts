@@ -27,7 +27,7 @@ export const normalizeTypography = (level: TypographyLevelObj) => {
         level.lineHeight > 0 &&
         level.lineHeight < 4
             ? Math.round(fontSize * level.lineHeight)
-            : level.lineHeight;
+            : Number(level.lineHeight);
 
     const letterSpacing =
         typeof level.letterSpacing === "string"

@@ -13,7 +13,7 @@ import type {
     XYColor,
 } from "@ui-types";
 import Color, { type ColorInstance } from "color";
-import gradientParser from "gradient-parser";
+import gradientParser, { type AngularNode } from "gradient-parser";
 import { isValidGradient, isValidHex } from "./colorRegex";
 import { randomColor, randomHexColor } from "./randomColor";
 
@@ -236,6 +236,35 @@ export const extractColors = (css: ColorLike): ColorLike[] | null => {
     }
 
     return colors.length > 0 ? colors : null;
+};
+
+interface GradientInfo {
+    angle: number;
+    colors: ColorLike[];
+    positions: number[];
+}
+
+export const extractGradientInfo = (css: ColorLike): GradientInfo | null => {
+    if (!css) return null;
+    if (!isValidGradient(css)) return null;
+    const ast = gradientParser.parse(css)[0];
+    if (!ast || !ast.colorStops) return null;
+
+    const colors: ColorLike[] = [];
+    const positions: number[] = [];
+    for (const stop of ast.colorStops) {
+        if (stop.type === "literal" || stop.type === "var") continue;
+        colors.push(serializeColorValue(stop));
+        if (stop.length && stop.length.type === "%") {
+            positions.push(parseFloat(stop.length.value) / 100);
+        }
+    }
+
+    return {
+        angle: parseFloat((ast.orientation as AngularNode).value) || 180,
+        colors,
+        positions,
+    };
 };
 
 export const constructLinearGradient = (

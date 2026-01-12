@@ -178,10 +178,10 @@ export type UnitSuffix =
     | "pt"
     | "fr";
 
-export interface MZTheme {
+export interface MzTheme {
     id: string;
     name: string;
-    description: string;
+    description?: string | null;
     adaptive: boolean;
     type: ThemeType;
     style: ThemeStyle;
@@ -237,9 +237,12 @@ export interface MZTheme {
         snackbar: number;
         tooltip: number;
     };
+
+    createdAt?: Date;
+    updatedAt?: Date;
 }
 
 declare module "@emotion/react" {
     // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-    export interface Theme extends MZTheme {}
+    export interface Theme extends MzTheme {}
 }

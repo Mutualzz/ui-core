@@ -5,6 +5,7 @@
         "gradient-parser": "^1.1.1"
     },
     "devDependencies": {
+        "@mutualzz/eslint-config": "workspace:*",
         "@types/gradient-parser": "^1.1.0",
         "bunchee": "^6.9.3"
     },
@@ -26,7 +27,8 @@
     "scripts": {
         "build": "pnpm typecheck && bunchee",
         "dev": "bunchee --watch",
-        "typecheck": "tsc --noEmit"
+        "typecheck": "tsc --noEmit",
+        "lint": "eslint ."
     },
     "types": "./dist/index.d.ts"
 }

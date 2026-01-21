@@ -19,6 +19,8 @@ export const getScrollableAncestors = (
     return ancestors;
 };
 
+export const snap = (v: number, step = 0.1) => Math.round(v / step) * step;
+
 export const normalizeTypography = (level: TypographyLevelObj) => {
     const { fontSize } = level;
 

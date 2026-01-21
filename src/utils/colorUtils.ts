@@ -13,7 +13,10 @@ import type {
     XYColor,
 } from "@ui-types";
 import Color, { type ColorInstance } from "color";
-import gradientParser, { type AngularNode, type HexNode, } from "gradient-parser";
+import gradientParser, {
+    type AngularNode,
+    type HexNode,
+} from "gradient-parser";
 import { isValidGradient, isValidHex } from "./colorRegex";
 import { randomColor, randomHexColor } from "./randomColor";
 
@@ -163,8 +166,8 @@ export const handleColor = (str: string | HsvaColor): ColorResult => {
         hsva = new Color(str).hsv().object() as unknown as HsvaColor;
         hex = str as Hex;
     } else if (typeof str !== "string") {
-        // @ts-expect-error We expect str to not have position but we need to strip it runtime since its coming from a different component
-        const { position, ...rest } = str;
+        // @ts-expect-error We expect str to not have position and id but we need to strip it runtime since its coming from a different component
+        const { position, id, ...rest } = str;
         hsva = rest;
     }
 

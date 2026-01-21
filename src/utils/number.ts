@@ -10,5 +10,5 @@ export const round = (
     return Math.round(base * number) / base;
 };
 
-export const flipNumber = (num: number, withinHundreds: boolean = true) =>
+export const flipNumber = (num: number, withinHundreds = true) =>
     withinHundreds ? 100 - clamp(num, 0, 100) : 1 - clamp(num, 0, 1);

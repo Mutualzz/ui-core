@@ -51,7 +51,7 @@ export interface XYColor {
     bri?: number;
 }
 
-export type ColorResult = {
+export interface ColorResult {
     rgb: RgbColor;
     hsl: HslColor;
     hsv: HsvColor;
@@ -61,7 +61,7 @@ export type ColorResult = {
     xy: XYColor;
     hex: Hex;
     hexa: Hex;
-};
+}
 
 export type ObjectColor =
     | RgbColor
@@ -143,7 +143,7 @@ export type SystemProps<T = HTMLElement> = HTMLAttributes<T> &
     HTMLBorderProps &
     HTMLDisplayProps &
     HTMLFlexboxProps &
-    // HTMLPalleteProps &
+    // HTMLPaletteProps &
     HTMLPositionsProps &
     HTMLShadowsProps &
     HTMLSizingProps &

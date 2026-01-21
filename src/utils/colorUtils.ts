@@ -13,7 +13,7 @@ import type {
     XYColor,
 } from "@ui-types";
 import Color, { type ColorInstance } from "color";
-import gradientParser, { type AngularNode } from "gradient-parser";
+import gradientParser, { type AngularNode, type HexNode, } from "gradient-parser";
 import { isValidGradient, isValidHex } from "./colorRegex";
 import { randomColor, randomHexColor } from "./randomColor";
 
@@ -27,7 +27,7 @@ type OutputFormat =
     | "hsv"
     | "hsva";
 
-type FormatOptions = {
+interface FormatOptions {
     format?: OutputFormat;
     alpha?: number; // 0-100
 
@@ -47,7 +47,7 @@ type FormatOptions = {
     blacken?: number; // 0-100
     fade?: number; // 0-100
     opaquer?: number; // 0-100
-};
+}
 
 export function formatColor(
     inputColor: ColorInstance | ColorLike | ObjectColor,
@@ -163,8 +163,11 @@ export const handleColor = (str: string | HsvaColor): ColorResult => {
         hsva = new Color(str).hsv().object() as unknown as HsvaColor;
         hex = str as Hex;
     } else if (typeof str !== "string") {
-        hsva = str;
+        // @ts-expect-error We expect str to not have position but we need to strip it runtime since its coming from a different component
+        const { position, ...rest } = str;
+        hsva = rest;
     }
+
     if (hsva) {
         const color = new Color(hsva);
         hsv = color.hsv().object() as unknown as HsvColor;
@@ -269,7 +272,7 @@ export const extractGradientInfo = (css: ColorLike): GradientInfo | null => {
 
 export const constructLinearGradient = (
     orientation: number,
-    colors: Hex[],
+    stops: { color: Hex; position: number }[],
 ): ColorLike => {
     return gradientParser.stringify([
         {
@@ -278,10 +281,17 @@ export const constructLinearGradient = (
                 type: "angular",
                 value: orientation.toString(),
             },
-            colorStops: colors.map((hex) => ({
-                type: "hex",
-                value: hex.replace("#", ""),
-            })),
+            colorStops: stops.map(
+                ({ color, position }) =>
+                    ({
+                        type: "hex",
+                        value: color.replace("#", ""),
+                        length: {
+                            type: "%",
+                            value: position.toFixed(1),
+                        },
+                    }) as HexNode,
+            ),
         },
     ]) as ColorLike;
 };

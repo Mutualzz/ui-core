@@ -7,7 +7,7 @@
     "devDependencies": {
         "@mutualzz/eslint-config": "workspace:*",
         "@types/gradient-parser": "^1.1.0",
-        "bunchee": "^6.9.3"
+        "bunchee": "^6.9.4"
     },
     "exports": {
         ".": {

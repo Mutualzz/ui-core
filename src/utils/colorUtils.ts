@@ -54,7 +54,7 @@ interface FormatOptions {
 
 export function formatColor(
     inputColor: ColorInstance | ColorLike | ObjectColor,
-    options: FormatOptions,
+    options?: FormatOptions,
 ): ColorLike {
     const {
         alpha,
@@ -72,7 +72,7 @@ export function formatColor(
         blacken,
         fade,
         opaquer,
-    } = options;
+    } = options ?? {};
 
     const colorStr =
         typeof inputColor === "string"
@@ -107,9 +107,8 @@ export function formatColor(
                 const { type, value } = colorToAstNode(col, format);
                 stop.type = type;
                 stop.value = value;
-            } catch (err) {
+            } catch {
                 // ignore invalid stops
-                console.error(err);
             }
         }
 
@@ -133,14 +132,14 @@ export function formatColor(
         if (fade) col = col.fade(fade / 100);
         if (opaquer) col = col.opaquer(opaquer / 100);
 
-        return formatSolidColor(col, format) as ColorLike;
+        return formatSolidColor(col, format);
     } catch {
         return new Color(randomHexColor()).hex() as ColorLike;
     }
 }
 
 function isColorInstance(value: any): value is ColorInstance {
-    return value != null && typeof (value as any).string === "function";
+    return value != null && typeof value.string === "function";
 }
 
 export function createColor(color?: ColorLike, theme?: Theme): ColorInstance {
@@ -210,9 +209,8 @@ export function dynamicElevation(
                 const { type, value } = colorToAstNode(col, format);
                 stop.type = type;
                 stop.value = value;
-            } catch (err: any) {
+            } catch {
                 // ignore invalid stops
-                console.error(err.stack);
             }
         }
 
@@ -322,10 +320,10 @@ function formatSolidColor(
     }
 }
 
-type AstNode = {
+interface AstNode {
     type: "hex" | "rgb" | "rgba" | "hsl" | "hsla";
     value: any;
-};
+}
 
 function colorToAstNode(
     instance: ColorInstance,

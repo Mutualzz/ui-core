@@ -14,7 +14,7 @@ export const isThemeColor = (
 
 export const isTypographyColor = (
     color: Color | TypographyColor | ColorLike,
-): color is TypographyColor => {
+): color is Exclude<TypographyColor, "transparent" | "inherit"> => {
     return (
         typeof color === "string" &&
         ["primary", "secondary", "accent", "muted"].includes(color)

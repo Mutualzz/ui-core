@@ -12,7 +12,7 @@ export const baseDarkTheme: Theme = {
     colors: {
         common: { white: "#F9F6F9", black: "#0B0710" },
         primary: "#88449a",
-        neutral: "#ddceda",
+        neutral: "#6c5a6d",
         background: "#0D0710",
         surface: "#241927",
         danger: "#B63B44",

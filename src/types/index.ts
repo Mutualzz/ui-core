@@ -91,7 +91,13 @@ export type Color =
     | "warning"
     | "info";
 
-export type TypographyColor = "primary" | "secondary" | "accent" | "muted";
+export type TypographyColor =
+    | "primary"
+    | "secondary"
+    | "accent"
+    | "muted"
+    | "transparent"
+    | "inherit";
 
 export type Variant = "plain" | "outlined" | "soft" | "solid";
 

@@ -1,4 +1,4 @@
-import type { TypographyLevelObj } from "@ui-types";
+import type { Shape, SizeValue, TypographyLevelObj } from "@ui-types";
 
 export const getScrollableAncestors = (
     node: HTMLElement | null,
@@ -91,6 +91,26 @@ export const isCssMarker = (
     marker: any,
 ): marker is (typeof allowedListStyleTypes)[number] => {
     return allowedListStyleTypes.includes(marker);
+};
+
+export const resolveShapeValue = (shape: Shape | SizeValue | number) => {
+    let resolvedRadius;
+    switch (shape) {
+        case "circle":
+            resolvedRadius = 9999;
+            break;
+        case "rounded":
+            resolvedRadius = 8;
+            break;
+        case "square":
+            resolvedRadius = 0;
+            break;
+        default:
+            resolvedRadius = shape;
+            break;
+    }
+
+    return resolvedRadius;
 };
 
 export * from "./colorRegex";

@@ -138,6 +138,7 @@ export type Size = "sm" | "md" | "lg";
 
 export type Breakpoint = "xs" | "sm" | "md" | "lg" | "xl";
 export type Spacing = "xs" | "sm" | "md" | "lg" | "xl";
+export type Shape = "circle" | "square" | "rounded";
 
 export type Responsive<T> = T | Partial<Record<Breakpoint, T>>;
 export type ThemeType = "light" | "dark";

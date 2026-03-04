@@ -13,10 +13,7 @@ import type {
     XYColor,
 } from "@ui-types";
 import Color, { type ColorInstance } from "color";
-import gradientParser, {
-    type AngularNode,
-    type HexNode,
-} from "gradient-parser";
+import gradientParser, { type AngularNode, type HexNode, } from "gradient-parser";
 import { isValidGradient, isValidHex } from "./colorRegex";
 import { randomColor, randomHexColor } from "./randomColor";
 
@@ -52,8 +49,48 @@ interface FormatOptions {
     opaquer?: number; // 0-100
 }
 
+function applyModifiers(
+    color: ColorInstance,
+    options: FormatOptions,
+): ColorInstance {
+    const {
+        alpha,
+        negate,
+        invert,
+        grayscale,
+        greyscale,
+        lighten,
+        darken,
+        lightness,
+        saturate,
+        desaturate,
+        whiten,
+        blacken,
+        fade,
+        opaquer,
+    } = options;
+
+    let modifiedColor = color;
+
+    if (alpha) modifiedColor = modifiedColor.alpha(alpha / 100);
+    if (negate && !invert) modifiedColor = modifiedColor.negate();
+    if (invert && !negate) modifiedColor = modifiedColor.negate(); // alias
+    if (grayscale || greyscale) modifiedColor = modifiedColor.grayscale();
+    if (lighten) modifiedColor = modifiedColor.lighten(lighten / 100);
+    if (darken) modifiedColor = modifiedColor.darken(darken / 100);
+    if (lightness) modifiedColor = modifiedColor.lightness(lightness);
+    if (saturate) modifiedColor = modifiedColor.saturate(saturate / 100);
+    if (desaturate) modifiedColor = modifiedColor.desaturate(desaturate / 100);
+    if (whiten) modifiedColor = modifiedColor.whiten(whiten / 100);
+    if (blacken) modifiedColor = modifiedColor.blacken(blacken / 100);
+    if (fade) modifiedColor = modifiedColor.fade(fade / 100);
+    if (opaquer) modifiedColor = modifiedColor.opaquer(opaquer / 100);
+
+    return modifiedColor;
+}
+
 export function formatColor(
-    inputColor: ColorInstance | ColorLike | ObjectColor,
+    inputColor: ColorInstance | ColorLike | ObjectColor | string,
     options?: FormatOptions,
 ): ColorLike {
     const {
@@ -88,23 +125,12 @@ export function formatColor(
             try {
                 if (stop.type === "literal" || stop.type === "var") continue;
 
-                let col = new Color(serializeColorValue(stop));
+                const color = applyModifiers(
+                    new Color(serializeColorValue(stop)),
+                    options ?? {},
+                );
 
-                if (alpha) col = col.alpha(alpha / 100);
-                if (negate && !invert) col = col.negate();
-                if (invert && !negate) col = col.negate(); // alias
-                if (grayscale || greyscale) col = col.grayscale();
-                if (lighten) col = col.lighten(lighten / 100);
-                if (darken) col = col.darken(darken / 100);
-                if (lightness) col = col.lightness(lightness);
-                if (saturate) col = col.saturate(saturate / 100);
-                if (desaturate) col = col.desaturate(desaturate / 100);
-                if (whiten) col = col.whiten(whiten / 100);
-                if (blacken) col = col.blacken(blacken / 100);
-                if (fade) col = col.fade(fade / 100);
-                if (opaquer) col = col.opaquer(opaquer / 100);
-
-                const { type, value } = colorToAstNode(col, format);
+                const { type, value } = colorToAstNode(color, format);
                 stop.type = type;
                 stop.value = value;
             } catch {
@@ -116,23 +142,9 @@ export function formatColor(
     }
 
     try {
-        let col = new Color(colorStr);
+        const color = applyModifiers(new Color(colorStr), options ?? {});
 
-        if (alpha) col = col.alpha(alpha / 100);
-        if (negate && !invert) col = col.negate();
-        if (invert && !negate) col = col.negate();
-        if (grayscale || greyscale) col = col.grayscale();
-        if (lighten) col = col.lighten(lighten / 100);
-        if (darken) col = col.darken(darken / 100);
-        if (lightness) col = col.lightness(lightness);
-        if (saturate) col = col.saturate(saturate / 100);
-        if (desaturate) col = col.desaturate(desaturate / 100);
-        if (whiten) col = col.whiten(whiten / 100);
-        if (blacken) col = col.blacken(blacken / 100);
-        if (fade) col = col.fade(fade / 100);
-        if (opaquer) col = col.opaquer(opaquer / 100);
-
-        return formatSolidColor(col, format);
+        return formatSolidColor(color, format);
     } catch {
         return new Color(randomHexColor()).hex() as ColorLike;
     }
@@ -165,7 +177,7 @@ export const handleColor = (str: string | HsvaColor): ColorResult => {
         hsva = new Color(str).hsv().object() as unknown as HsvaColor;
         hex = str as Hex;
     } else if (typeof str !== "string") {
-        // @ts-expect-error We expect str to not have position and id but we need to strip it runtime since its coming from a different component
+        // @ts-expect-error We expect str to not have position and id, but we need to strip it runtime since it's coming from a different component
         const { position, id, ...rest } = str;
         hsva = rest;
     }

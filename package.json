@@ -22,7 +22,7 @@
     "peerDependencies": {
         "@emotion/react": "11.11.0",
         "@emotion/styled": "11.14.1",
-        "react": "19.2.0"
+        "react": "19.2.10"
     },
     "scripts": {
         "build": "pnpm typecheck && bunchee",

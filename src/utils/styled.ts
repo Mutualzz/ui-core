@@ -16,7 +16,11 @@ export const shouldForwardProp = (prop: string) =>
     isPropValid(prop) && !blockedProps.includes(prop);
 
 // what the consumer sees (no theme in their props)
-export type PublicProps<P> = P & { sx?: SxProps; theme?: Theme };
+export type PublicProps<P> = P & {
+    as?: keyof JSX.IntrinsicElements | ComponentType<any>;
+    sx?: SxProps;
+    theme?: Theme;
+};
 
 // what your style callbacks receive (adds theme)
 export type CallbackProps<P> = PublicProps<P> & { theme: Theme };

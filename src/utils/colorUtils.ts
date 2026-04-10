@@ -13,7 +13,7 @@ import type {
     XYColor,
 } from "@ui-types";
 import Color, { type ColorInstance } from "color";
-import gradientParser, { type AngularNode, type HexNode, } from "gradient-parser";
+import gradientParser, { type AngularNode } from "gradient-parser";
 import { isValidGradient, isValidHex } from "./colorRegex";
 import { randomColor, randomHexColor } from "./randomColor";
 
@@ -93,23 +93,7 @@ export function formatColor(
     inputColor: ColorInstance | ColorLike | ObjectColor | string,
     options?: FormatOptions,
 ): ColorLike {
-    const {
-        alpha,
-        format = "hex",
-        negate,
-        invert,
-        grayscale,
-        greyscale,
-        lighten,
-        darken,
-        lightness,
-        saturate,
-        desaturate,
-        whiten,
-        blacken,
-        fade,
-        opaquer,
-    } = options ?? {};
+    const { format = "hex" } = options ?? {};
 
     const colorStr =
         typeof inputColor === "string"
@@ -293,7 +277,7 @@ export const constructLinearGradient = (
             orientation: {
                 type: "angular",
                 value: orientation.toString(),
-            },
+            } as any,
             colorStops: stops.map(
                 ({ color, position }) =>
                     ({
@@ -303,7 +287,7 @@ export const constructLinearGradient = (
                             type: "%",
                             value: position.toFixed(1),
                         },
-                    }) as HexNode,
+                    }) as any,
             ),
         },
     ]) as ColorLike;

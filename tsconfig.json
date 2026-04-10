@@ -5,7 +5,7 @@
         "declaration": false,
         "emitDeclarationOnly": false,
         "outDir": "dist",
-        "moduleResolution": "node",
+        "moduleResolution": "bundler",
         "allowSyntheticDefaultImports": true,
         "verbatimModuleSyntax": true,
         "esModuleInterop": true,
@@ -14,15 +14,16 @@
         "strict": true,
         "jsx": "react-jsx",
         "jsxImportSource": "@emotion/react",
-        "baseUrl": "./src",
+        "rootDir": "./src",
         "paths": {
-            "@utils": ["utils/index"],
-            "@hooks/*": ["hooks/*"],
-            "@utils/*": ["utils/*"],
-            "@styled": ["utils/styled"],
-            "@ui-types": ["types/index.ts"],
-            "@ui-types/*": ["types/*"]
+            "@utils": ["./src/utils/index"],
+            "@hooks/*": ["./src/hooks/*"],
+            "@utils/*": ["./src/utils/*"],
+            "@styled": ["./src/utils/styled"],
+            "@ui-types": ["./src/types/index.ts"],
+            "@ui-types/*": ["./src/types/*"]
         }
     },
-    "include": ["src/**/*"]
+    "include": ["src/**/*"],
+    "exclude": ["dist", "dist/**", "**/dist/**"]
 }

@@ -115,6 +115,7 @@ export const resolveShapeValue = (shape: Shape | SizeValue | number) => {
 
 export * from "./colorRegex";
 export * from "./colorUtils";
+export { aliasMaps, spacingAliasMap } from "./aliases";
 export * from "./getReactElementRef";
 export * from "./getRelativePosition";
 export * from "./number";

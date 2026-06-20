@@ -17,7 +17,7 @@ export const resolveResponsiveProp = <T>(
     if (definedBreakpoints.length === 0)
         return { base: prop as T, queries: {} };
 
-    const sortedBreakpoints = definedBreakpoints.toSorted(
+    const sortedBreakpoints = [...definedBreakpoints].sort(
         (a, b) => allBreakpoints.indexOf(a) - allBreakpoints.indexOf(b),
     );
     const smallestBreakpoint = sortedBreakpoints[0];

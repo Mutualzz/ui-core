@@ -1,4 +1,16 @@
 export const typographyLevels = {
+    "label-xs": {
+        fontSize: 12,
+        lineHeight: 1,
+        fontWeight: 600,
+        letterSpacing: "0.02em",
+    },
+    "label-sm": {
+        fontSize: 14,
+        lineHeight: 1,
+        fontWeight: 500,
+        letterSpacing: "0.01em",
+    },
     "body-xs": {
         fontSize: 12,
         lineHeight: 1.3,

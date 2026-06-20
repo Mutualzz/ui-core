@@ -12,6 +12,9 @@ export * from "./hooks/useIsomorphicLayoutEffect";
 export * from "./hooks/useOnClickOutside";
 export * from "./hooks/useRafState";
 
+// Fonts
+export * from "./fonts";
+
 // Themes
 export * from "./themes";
 

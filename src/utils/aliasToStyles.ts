@@ -57,7 +57,7 @@ export function aliasToStyles(props: Record<string, any>, theme: Theme) {
             const allBreakpoints = theme.breakpoints.keys;
             const definedBreakpoints = Object.keys(raw) as Breakpoint[];
 
-            const sortedBreakpoints = definedBreakpoints.toSorted(
+            const sortedBreakpoints = [...definedBreakpoints].sort(
                 (a, b) => allBreakpoints.indexOf(a) - allBreakpoints.indexOf(b),
             );
 

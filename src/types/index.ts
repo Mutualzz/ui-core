@@ -111,9 +111,11 @@ export type TypographyDisplayKey =
 export type TypographyHeadingKey = "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
 export type TypographyTitleKey = "title-sm" | "title-md" | "title-lg";
 export type TypographyBodyKey = "body-xs" | "body-sm" | "body-md" | "body-lg";
+export type TypographyLabelKey = "label-xs" | "label-sm";
 
 export type TypographyLevel =
     | TypographyBodyKey
+    | TypographyLabelKey
     | TypographyTitleKey
     | TypographyHeadingKey
     | TypographyDisplayKey;

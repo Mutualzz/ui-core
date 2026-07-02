@@ -32,11 +32,17 @@ export interface StyledWithSxInterface {
     ): <Props extends object = object>(
         ...styles: (
             | TemplateStringsArray
-            | Interpolation<CallbackProps<JSX.IntrinsicElements[Tag] & Props>>
+            | Interpolation<
+                  CallbackProps<
+                      Omit<JSX.IntrinsicElements[Tag], keyof Props> & Props
+                  >
+              >
             | string
             | number
         )[]
-    ) => ComponentType<PublicProps<JSX.IntrinsicElements[Tag] & Props>>;
+    ) => ComponentType<
+        PublicProps<Omit<JSX.IntrinsicElements[Tag], keyof Props> & Props>
+    >;
 
     <Component extends ComponentType<any>>(
         component: Component,
@@ -45,12 +51,19 @@ export interface StyledWithSxInterface {
         ...styles: (
             | TemplateStringsArray
             | Interpolation<
-                  CallbackProps<ComponentPropsWithRef<Component> & Props>
+                  CallbackProps<
+                      Omit<ComponentPropsWithRef<Component>, keyof Props> &
+                          Props
+                  >
               >
             | string
             | number
         )[]
-    ) => ComponentType<PublicProps<ComponentPropsWithRef<Component> & Props>>;
+    ) => ComponentType<
+        PublicProps<
+            Omit<ComponentPropsWithRef<Component>, keyof Props> & Props
+        >
+    >;
 }
 
 export type StyledWithSx = StyledWithSxInterface & typeof styledBase;

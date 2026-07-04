@@ -119,6 +119,7 @@ export { aliasMaps, spacingAliasMap } from "./aliases";
 export * from "./getReactElementRef";
 export * from "./getRelativePosition";
 export * from "./number";
+export * from "./profileCanvas";
 export * from "./randomColor";
 export * from "./resolveColors";
 export * from "./resolveSize";

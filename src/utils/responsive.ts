@@ -96,7 +96,7 @@ export const resolveResponsiveMerge = <T extends Record<string, any>>(
     styleFn: (values: T) => Record<string, any>,
 ): Record<string, any> => {
     const breakpoints = theme.breakpoints.keys;
-    const merged: Responsive<T> = {} as Responsive<T>;
+    const merged: Responsive<T> = {};
 
     for (const bp of breakpoints) {
         const values: Partial<T> = {};

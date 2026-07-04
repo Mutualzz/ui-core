@@ -11,7 +11,7 @@ export function useRafState<T>(
     const schedule = useEvent((v: T | ((p: T) => T)) => {
         if (typeof v === "function")
             (nextVal as any).current = (v as any)(nextVal.current);
-        else nextVal.current = v as T;
+        else nextVal.current = v;
         if (frame.current == null) {
             frame.current = requestAnimationFrame(() => {
                 setState(nextVal.current);

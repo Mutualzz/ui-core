@@ -24,9 +24,7 @@ export const randomHexColor = (alpha?: number): Hex => {
         .join("")}`;
 
     if (alpha && alpha !== 100) {
-        // Clamp alpha between 0 and 1
         const clampedAlpha = Math.max(0, Math.min(1, alpha));
-        // Convert to 0-255 range and add to hex
         const alphaHex = Math.round(clampedAlpha * 255)
             .toString(16)
             .padStart(2, "0")
@@ -47,11 +45,8 @@ export const randomHsvColor = (alpha?: number): HSV | HSVA => {
     const array = new Uint8Array(3);
     crypto.getRandomValues(array);
 
-    // Hue: 0-360 degrees
     const h = Math.round((array[0] / 255) * 360);
-    // Saturation: 20-100% (avoid too desaturated colors)
     const s = Math.round(20 + (array[1] / 255) * 80);
-    // Value/Brightness: 20-100% (avoid too dark colors)
     const v = Math.round(20 + (array[2] / 255) * 80);
 
     if (alpha && alpha !== 100) {
@@ -90,11 +85,8 @@ export const randomHslColor = (alpha?: number): HSL | HSLA => {
     const array = new Uint8Array(3);
     crypto.getRandomValues(array);
 
-    // Hue: 0-360 degrees
     const h = Math.round((array[0] / 255) * 360);
-    // Saturation: 20-100% (avoid too desaturated colors)
     const s = Math.round(20 + (array[1] / 255) * 80);
-    // Lightness: 20-80% (avoid too dark/light colors)
     const l = Math.round(20 + (array[2] / 255) * 60);
 
     if (alpha && alpha !== 100) {
@@ -110,10 +102,8 @@ export const randomHslColor = (alpha?: number): HSL | HSLA => {
  * @returns {ColorLike} Random linear-gradient CSS string
  */
 export const randomLinearGradient = (): ColorLike => {
-    // Generate two random colors
     const color1 = randomHexColor();
     const color2 = randomHexColor();
-    // Random angle (0-360deg)
     const angle = Math.floor(Math.random() * 361);
     return `linear-gradient(${angle}deg, ${color1}, ${color2})`;
 };

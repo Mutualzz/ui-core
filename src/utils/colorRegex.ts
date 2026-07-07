@@ -96,9 +96,6 @@ export const isValidColorInput = (value: string): boolean => {
 
     if (isValidFormat) return true;
 
-    // If regex patterns don't match, use culori to check for named colors
-    // and other valid CSS color formats
-
     try {
         const parsed = new Color(trimmed);
         return parsed !== undefined;

@@ -10,10 +10,8 @@ export interface PixelRect {
     height: number;
 }
 
-/** The fixed canvas width. Block positions are stored as % of this value. */
 export const PROFILE_CANVAS_REF_WIDTH = 1600;
 
-/** All block dimensions are expressed as % of canvas width so layout scales uniformly. */
 export const canvasUnit = (canvas: CanvasRect) => canvas.width;
 
 export const percentToPixels = (
@@ -36,11 +34,6 @@ export const sortBlocksByZIndex = <T extends { zIndex: number }>(
 export const nextZIndex = <T extends { zIndex: number }>(blocks: T[]) =>
     blocks.reduce((max, block) => Math.max(max, block.zIndex), 0) + 1;
 
-/**
- * Deliberately not imported from `@mutualzz/types` — this package stays
- * dependency-free of app-domain types. Values must stay in sync with
- * `ProfileBlockType` in packages/types.
- */
 export type ProfileBlockTypeName =
     | "header"
     | "text"
@@ -71,7 +64,6 @@ export interface ProfileBlockSizeLimits {
     recommendedHeight: number;
 }
 
-/** Size bounds and recommended defaults (% of canvas width) per block type. */
 export const PROFILE_BLOCK_SIZE_LIMITS: Record<
     ProfileBlockTypeName,
     ProfileBlockSizeLimits
@@ -169,7 +161,6 @@ export const PROFILE_BLOCK_SIZE_LIMITS: Record<
 export const getProfileBlockSizeLimits = (type: ProfileBlockTypeName) =>
     PROFILE_BLOCK_SIZE_LIMITS[type];
 
-/** @deprecated Use per-block limits via getProfileBlockSizeLimits */
 export const MIN_BLOCK_PERCENT = 4;
 export const PROFILE_GRID_STEP = 4;
 
@@ -269,7 +260,9 @@ export const pixelsToPercent = (
     return {
         x: roundPercent(clamp((rect.left / unit) * 100, 0, 100)),
         y: roundPercent(clamp((rect.top / unit) * 100, 0, 100)),
-        width: roundPercent(clamp((rect.width / unit) * 100, minWidth, maxWidth)),
+        width: roundPercent(
+            clamp((rect.width / unit) * 100, minWidth, maxWidth),
+        ),
         height: roundPercent(
             clamp((rect.height / unit) * 100, minHeight, maxHeight),
         ),
@@ -329,11 +322,6 @@ export const clampPixelRect = (
     return { left, top, width, height };
 };
 
-/**
- * Builds the type-specific content fields for a new block (everything
- * except `id`/`zIndex`, which are app-specific — see `addBlockAtPoint`
- * in each platform's profileEditor.utils.ts).
- */
 export const createDefaultBlockContent = (
     type: ProfileBlockTypeName,
     canvas: CanvasRect,
@@ -355,7 +343,8 @@ export const createDefaultBlockContent = (
         : 50 - size.width / 2;
     const y = point
         ? clamp(
-              (point.y / Math.max(canvasUnit(canvas), 1)) * 100 - size.height / 2,
+              (point.y / Math.max(canvasUnit(canvas), 1)) * 100 -
+                  size.height / 2,
               0,
               canvasHeightUnits - size.height,
           )

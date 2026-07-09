@@ -4,6 +4,8 @@ import type {
     Hex,
     HSL,
     HSLA,
+    HSV,
+    HSVA,
     RGB,
     RGBA,
 } from "@ui-types";
@@ -56,6 +58,12 @@ export const useColorInput = <T = ColorLike>(
                         break;
                     case "hsl":
                         setColor(parsed.hsl().string() as HSL | HSLA);
+                        break;
+                    case "hsv":
+                        setColor(parsed.hsv().string() as HSV | HSVA);
+                        break;
+                    default:
+                        setColor(parsed.string() as ColorLike);
                 }
                 setIsInvalid(false);
 
@@ -94,6 +102,12 @@ export const useColorInput = <T = ColorLike>(
                     break;
                 case "hsl":
                     setColor(parsed.hsl().string() as HSL | HSLA);
+                    break;
+                case "hsv":
+                    setColor(parsed.hsv().string() as HSV | HSVA);
+                    break;
+                default:
+                    setColor(parsed.string() as ColorLike);
             }
             setIsInvalid(false);
         } else {

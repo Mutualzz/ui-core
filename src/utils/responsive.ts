@@ -43,7 +43,7 @@ export const resolveResponsiveProp = <T>(
                     break;
                 }
             }
-            if (!value)
+            if (value === undefined)
                 value = bpProp[sortedBreakpoints[sortedBreakpoints.length - 1]];
         }
 

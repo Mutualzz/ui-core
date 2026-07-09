@@ -72,13 +72,12 @@ function applyModifiers(
 
     let modifiedColor = color;
 
-    if (alpha) modifiedColor = modifiedColor.alpha(alpha / 100);
-    if (negate && !invert) modifiedColor = modifiedColor.negate();
-    if (invert && !negate) modifiedColor = modifiedColor.negate(); // alias
+    if (alpha != null) modifiedColor = modifiedColor.alpha(alpha / 100);
+    if (negate || invert) modifiedColor = modifiedColor.negate();
     if (grayscale || greyscale) modifiedColor = modifiedColor.grayscale();
     if (lighten) modifiedColor = modifiedColor.lighten(lighten / 100);
     if (darken) modifiedColor = modifiedColor.darken(darken / 100);
-    if (lightness) modifiedColor = modifiedColor.lightness(lightness);
+    if (lightness != null) modifiedColor = modifiedColor.lightness(lightness);
     if (saturate) modifiedColor = modifiedColor.saturate(saturate / 100);
     if (desaturate) modifiedColor = modifiedColor.desaturate(desaturate / 100);
     if (whiten) modifiedColor = modifiedColor.whiten(whiten / 100);
@@ -139,11 +138,12 @@ function isColorInstance(value: any): value is ColorInstance {
 }
 
 export function createColor(color?: ColorLike, theme?: Theme): ColorInstance {
-    if (!color) return Color(theme?.colors.neutral) || randomColor();
+    if (!color)
+        return new Color(theme?.colors.neutral ?? randomColor());
     try {
         return new Color(color);
     } catch {
-        return new Color(theme?.colors.neutral || randomColor());
+        return new Color(theme?.colors.neutral ?? randomColor());
     }
 }
 
@@ -260,8 +260,14 @@ export const extractGradientInfo = (css: ColorLike): GradientInfo | null => {
         }
     }
 
+    const orientation = ast.orientation as AngularNode | undefined;
+    const angle =
+        orientation && orientation.type === "angular"
+            ? parseFloat(orientation.value) || 180
+            : 180;
+
     return {
-        angle: parseFloat((ast.orientation as AngularNode).value) || 180,
+        angle,
         colors,
         positions,
     };

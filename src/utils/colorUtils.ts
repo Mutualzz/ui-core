@@ -273,6 +273,80 @@ export const extractGradientInfo = (css: ColorLike): GradientInfo | null => {
     };
 };
 
+export const normalizeGradientStopPositions = (
+    colorCount: number,
+    positions: number[] | undefined,
+): number[] => {
+    if (colorCount <= 0) return [];
+
+    return Array.from({ length: colorCount }, (_, index) => {
+        const parsed = positions?.[index];
+        if (parsed != null) return parsed * 100;
+
+        return colorCount === 1 ? 0 : (index / (colorCount - 1)) * 100;
+    });
+};
+
+export const buildPickerGradientStops = (
+    color?: ColorLike | HsvaColor | (ColorLike | HsvaColor)[],
+): { angle: number; stops: HsvaColor[]; positions: number[] } => {
+    if (Array.isArray(color)) {
+        const stops = color.map((value) =>
+            typeof value === "string" ? handleColor(value).hsva : value,
+        );
+
+        return {
+            angle: 90,
+            stops,
+            positions: normalizeGradientStopPositions(stops.length, undefined),
+        };
+    }
+
+    if (!color) {
+        const fallback = handleColor(randomColor("hex")).hsva;
+        return { angle: 90, stops: [fallback], positions: [0] };
+    }
+
+    if (typeof color !== "string") {
+        return { angle: 90, stops: [color], positions: [0] };
+    }
+
+    const info = extractGradientInfo(color);
+    if (info && info.colors.length > 0) {
+        return {
+            angle: info.angle,
+            stops: info.colors.map((value) => handleColor(value).hsva),
+            positions: normalizeGradientStopPositions(
+                info.colors.length,
+                info.positions,
+            ),
+        };
+    }
+
+    const solid = handleColor(color).hsva;
+    return { angle: 90, stops: [solid], positions: [0] };
+};
+
+export const computeInsertedStopPosition = (
+    stops: { id: string; position: number }[],
+    anchorId: string,
+): number => {
+    const sorted = [...stops].sort((a, b) => a.position - b.position);
+    const anchorIndex = sorted.findIndex((stop) => stop.id === anchorId);
+    const current = sorted[anchorIndex === -1 ? 0 : anchorIndex];
+    if (!current) return 50;
+
+    const next = sorted[anchorIndex + 1];
+    if (!next) {
+        return Math.min(
+            100,
+            current.position + (100 - current.position) / 2,
+        );
+    }
+
+    return (current.position + next.position) / 2;
+};
+
 export const constructLinearGradient = (
     orientation: number,
     stops: { color: Hex; position: number }[],

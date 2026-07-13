@@ -42,6 +42,7 @@ export type ProfileBlockTypeName =
     | "links"
     | "activity"
     | "roles"
+    | "connections"
     | "mutual"
     | "divider"
     | "quote"
@@ -123,6 +124,14 @@ export const PROFILE_BLOCK_SIZE_LIMITS: Record<
         minHeight: 6,
         maxHeight: 30,
         recommendedWidth: 22,
+        recommendedHeight: 10,
+    },
+    connections: {
+        minWidth: 12,
+        maxWidth: 72,
+        minHeight: 6,
+        maxHeight: 28,
+        recommendedWidth: 24,
         recommendedHeight: 10,
     },
     mutual: {
@@ -399,6 +408,8 @@ export const createDefaultBlockContent = (
             return clampBlock({ ...base, showCustomStatus: true });
         case "roles":
             return clampBlock({ ...base, maxRoles: 6 });
+        case "connections":
+            return clampBlock({ ...base });
         case "mutual":
             return clampBlock({ ...base, mode: "spaces", maxItems: 6 });
         case "divider":

@@ -37,3 +37,14 @@ export function isCustomProfileBlockCornerRadius(
 ): boolean {
   return block.cornerRadius != null;
 }
+
+export function resolveProfileBlockBackgroundColor(
+  block: { backgroundColor?: string | null },
+): string | null {
+  const value = block.backgroundColor?.trim();
+  return value || null;
+}
+
+export function supportsProfileBlockBackgroundColor(type: string): boolean {
+  return type !== "divider" && type !== "draw";
+}

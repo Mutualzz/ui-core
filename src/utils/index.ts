@@ -132,3 +132,4 @@ export * from "./setRef";
 export * from "./spacing";
 export * from "./touch";
 export * from "./visuallyHidden";
+export * from "./wallpaper";

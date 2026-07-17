@@ -249,6 +249,20 @@ export interface MzTheme {
 
     createdAt?: Date;
     updatedAt?: Date;
+
+    backgroundImage?: string | null;
+    backgroundImageUrl?: string | null;
+    wallpaper?: {
+        brightness?: number;
+        saturation?: number;
+        overlay?: number;
+        chrome?: number;
+        content?: number;
+        card?: number;
+        popout?: number;
+        composer?: number;
+        blur?: number;
+    } | null;
 }
 
 declare module "@emotion/react" {

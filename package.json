@@ -29,6 +29,6 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint ."
   },
-  "version": "1.2.0",
+  "version": "1.2.1",
   "types": "./dist/index.d.ts"
 }

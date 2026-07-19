@@ -79,7 +79,7 @@ export function resolveWallpaperScrim(theme: Theme): string {
 
     return formatColor(base, {
         alpha: Math.round(settings.overlay * 0.55),
-        format: "hexa",
+        format: "rgba",
     }) as string;
 }
 
@@ -121,7 +121,7 @@ export function resolveWallpaperSurfaceStyles(
     return {
         background: formatColor(theme.colors.surface, {
             alpha,
-            format: "hexa",
+            format: "rgba",
         }) as string,
         boxShadow:
             role === "popout" || role === "composer"

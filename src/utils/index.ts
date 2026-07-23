@@ -130,6 +130,7 @@ export * from "./resolveSize";
 export * from "./responsive";
 export * from "./setRef";
 export * from "./spacing";
+export * from "./uiDensity";
 export * from "./touch";
 export * from "./visuallyHidden";
 export * from "./wallpaper";

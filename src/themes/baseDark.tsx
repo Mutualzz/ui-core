@@ -1,4 +1,5 @@
 import type { Theme } from "@emotion/react";
+import { themeSpacing } from "../utils/uiDensity";
 import { typographyLevels } from "./commonValues";
 
 export const baseDarkTheme: Theme = {
@@ -54,7 +55,7 @@ export const baseDarkTheme: Theme = {
             `@media not all and (min-width:${baseDarkTheme.breakpoints.values[key]}px)`,
     },
 
-    spacing: (factor: number) => `${0.25 * factor}rem`,
+    spacing: themeSpacing,
 
     shadows: [
         "none",

@@ -39,7 +39,7 @@ export const useColorInput = <T = ColorLike>(
                 return;
             }
 
-            let parsed = null;
+            let parsed: InstanceType<typeof Color>;
             try {
                 parsed = new Color(trimmed);
             } catch {
@@ -47,28 +47,26 @@ export const useColorInput = <T = ColorLike>(
                 return;
             }
 
-            if (parsed) {
-                switch (type) {
-                    case "hex":
-                        if (alpha === 100) setColor(parsed.hex() as Hex);
-                        else setColor(parsed.hexa() as Hex);
-                        break;
-                    case "rgb":
-                        setColor(parsed.rgb().string() as RGB | RGBA);
-                        break;
-                    case "hsl":
-                        setColor(parsed.hsl().string() as HSL | HSLA);
-                        break;
-                    case "hsv":
-                        setColor(parsed.hsv().string() as HSV | HSVA);
-                        break;
-                    default:
-                        setColor(parsed.string() as ColorLike);
-                }
-                setIsInvalid(false);
-
-                return;
+            switch (type) {
+                case "hex":
+                    if (alpha === 100) setColor(parsed.hex() as Hex);
+                    else setColor(parsed.hexa() as Hex);
+                    break;
+                case "rgb":
+                    setColor(parsed.rgb().string() as RGB | RGBA);
+                    break;
+                case "hsl":
+                    setColor(parsed.hsl().string() as HSL | HSLA);
+                    break;
+                case "hsv":
+                    setColor(parsed.hsv().string() as HSV | HSVA);
+                    break;
+                default:
+                    setColor(parsed.string() as ColorLike);
             }
+            setIsInvalid(false);
+
+            return;
         }
 
         setIsInvalid(true);

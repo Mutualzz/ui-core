@@ -66,7 +66,7 @@ export function aliasToStyles(props: Record<string, any>, theme: Theme) {
 
             for (let i = 0; i < allBreakpoints.length; i++) {
                 const currentBreakpoint = allBreakpoints[i];
-                let value: any = undefined;
+                let value: any;
 
                 if (raw[currentBreakpoint] !== undefined)
                     value = raw[currentBreakpoint];

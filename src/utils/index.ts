@@ -133,4 +133,5 @@ export * from "./spacing";
 export * from "./uiDensity";
 export * from "./touch";
 export * from "./visuallyHidden";
+export * from "./surface";
 export * from "./wallpaper";

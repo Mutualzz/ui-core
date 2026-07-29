@@ -3,7 +3,7 @@
 Thanks for wanting to help with **@mutualzz/ui-core**.
 
 Contributions are welcome. Redistributing unofficial builds or hosting a
-competing Mutualzz service is still not allowed — see [`LICENSE`](./LICENSE).
+competing Mutualzz service is still not allowed — see [`LICENSE`](https://github.com/mutualzz/ui-core/blob/master/LICENSE).
 
 
 ## Credit

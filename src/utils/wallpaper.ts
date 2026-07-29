@@ -9,7 +9,7 @@ export type WallpaperSurfaceRole =
     | "popout"
     | "composer";
 
-export type ThemeWallpaper = {
+export interface ThemeWallpaper {
     brightness?: number;
     saturation?: number;
     overlay?: number;
@@ -19,9 +19,9 @@ export type ThemeWallpaper = {
     popout?: number;
     composer?: number;
     blur?: number;
-};
+}
 
-export type ResolvedThemeWallpaper = {
+export interface ResolvedThemeWallpaper {
     brightness: number;
     saturation: number;
     overlay: number;
@@ -31,7 +31,7 @@ export type ResolvedThemeWallpaper = {
     popout: number;
     composer: number;
     blur: number;
-};
+}
 
 export const DEFAULT_WALLPAPER_DARK: ResolvedThemeWallpaper = {
     brightness: 102,
@@ -80,7 +80,7 @@ export function resolveWallpaperScrim(theme: Theme): string {
     return formatColor(base, {
         alpha: Math.round(settings.overlay * 0.55),
         format: "rgba",
-    }) as string;
+    });
 }
 
 export function resolveWallpaperDimOverlay(theme: Theme): string {

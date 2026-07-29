@@ -266,5 +266,5 @@ export interface MzTheme {
 }
 
 declare module "@emotion/react" {
-    export type Theme = MzTheme;
+    export interface Theme extends MzTheme {}
 }

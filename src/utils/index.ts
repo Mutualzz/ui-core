@@ -135,3 +135,4 @@ export * from "./touch";
 export * from "./visuallyHidden";
 export * from "./surface";
 export * from "./wallpaper";
+export * from "./themeToCssVars";

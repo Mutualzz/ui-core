@@ -13,6 +13,10 @@ export default [
         rules: {
             "@typescript-eslint/unbound-method": "off",
             "@typescript-eslint/no-unsafe-argument": "off",
+            "@typescript-eslint/no-empty-object-type": [
+                "error",
+                { allowInterfaces: "with-single-extends" },
+            ],
         },
     },
 ];

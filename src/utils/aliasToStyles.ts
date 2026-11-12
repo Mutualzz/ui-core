@@ -48,7 +48,6 @@ export function aliasToStyles(props: Record<string, any>, theme: Theme) {
         const raw = props[key];
         if (raw == null) continue;
 
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         const cssProps = aliasMaps[key as keyof typeof aliasMaps]?.slice() ?? [
             key,
         ];

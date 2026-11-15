@@ -122,6 +122,7 @@ export * from "./getRelativePosition";
 export * from "./number";
 export * from "./profileBackground";
 export * from "./profileBlockChrome";
+export * from "./profileBlockAppearance";
 export * from "./profileCanvas";
 export * from "./profileImage";
 export * from "./randomColor";

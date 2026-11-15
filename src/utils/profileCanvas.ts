@@ -14,6 +14,74 @@ export const PROFILE_CANVAS_REF_WIDTH = 1600;
 
 export const canvasUnit = (canvas: CanvasRect) => canvas.width;
 
+export const isProfileBlockOnlyMe = (block: {
+    hidden?: boolean | null;
+    visibility?: string | null;
+}) => !!block.hidden || block.visibility === "nobody";
+
+export const isProfileBlockFriendsOnly = (block: {
+    visibility?: string | null;
+}) => block.visibility === "friends";
+
+export const PROFILE_BLOCK_ROTATION_MAX = 180;
+
+const ROTATABLE_BLOCK_TYPES = new Set(["image", "sticker"]);
+
+export const supportsProfileBlockRotation = (type: string) =>
+    ROTATABLE_BLOCK_TYPES.has(type);
+
+export const getProfileBlockRotation = (block: {
+    type: string;
+    rotation?: number | null;
+}) => (supportsProfileBlockRotation(block.type) ? (block.rotation ?? 0) : 0);
+
+export const getRotatedBounds = (
+    rect: PixelRect,
+    degrees: number,
+): PixelRect => {
+    if (!degrees) return rect;
+
+    const radians = (degrees * Math.PI) / 180;
+    const cos = Math.abs(Math.cos(radians));
+    const sin = Math.abs(Math.sin(radians));
+    const width = rect.width * cos + rect.height * sin;
+    const height = rect.width * sin + rect.height * cos;
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+
+    return {
+        left: centerX - width / 2,
+        top: centerY - height / 2,
+        width,
+        height,
+    };
+};
+
+export const PROFILE_CANVAS_MAX_UNITS = 100;
+
+export const PROFILE_COUNTDOWN_DEFAULT_DAYS = 7;
+
+export const PROFILE_FOLD_UNITS = 56.25;
+
+export const PROFILE_PAGE_BOTTOM_MARGIN = 2;
+
+export const getProfilePageHeight = (blocks: { y: number; height: number }[]) =>
+    Math.min(
+        PROFILE_CANVAS_MAX_UNITS,
+        Math.max(
+            PROFILE_FOLD_UNITS,
+            getProfileContentBottom(blocks) + PROFILE_PAGE_BOTTOM_MARGIN,
+        ),
+    );
+
+export const getProfileContentBottom = (
+    blocks: { y: number; height: number }[],
+) =>
+    blocks.reduce(
+        (bottom, block) => Math.max(bottom, block.y + block.height),
+        0,
+    );
+
 export const percentToPixels = (
     block: { x: number; y: number; width: number; height: number },
     canvas: CanvasRect,
@@ -47,7 +115,11 @@ export type ProfileBlockTypeName =
     | "divider"
     | "quote"
     | "draw"
-    | "sticker";
+    | "sticker"
+    | "countdown"
+    | "gallery"
+    | "nowPlaying"
+    | "embed";
 
 export interface ProfileBlockGeometry {
     type: ProfileBlockTypeName;
@@ -100,6 +172,38 @@ export const PROFILE_BLOCK_SIZE_LIMITS: Record<
         minHeight: 8,
         maxHeight: 36,
         recommendedWidth: 26,
+        recommendedHeight: 10,
+    },
+    embed: {
+        minWidth: 16,
+        maxWidth: 100,
+        minHeight: 8,
+        maxHeight: 70,
+        recommendedWidth: 36,
+        recommendedHeight: 22,
+    },
+    nowPlaying: {
+        minWidth: 18,
+        maxWidth: 60,
+        minHeight: 8,
+        maxHeight: 30,
+        recommendedWidth: 30,
+        recommendedHeight: 12,
+    },
+    gallery: {
+        minWidth: 14,
+        maxWidth: 100,
+        minHeight: 10,
+        maxHeight: 70,
+        recommendedWidth: 36,
+        recommendedHeight: 24,
+    },
+    countdown: {
+        minWidth: 14,
+        maxWidth: 60,
+        minHeight: 6,
+        maxHeight: 24,
+        recommendedWidth: 24,
         recommendedHeight: 10,
     },
     links: {
@@ -433,6 +537,20 @@ export const createDefaultBlockContent = (
                 ...base,
                 type: "sticker",
                 expressionId: "",
+            });
+        case "gallery":
+            return clampBlock({ ...base, images: [], layout: "grid" });
+        case "nowPlaying":
+            return clampBlock({ ...base });
+        case "embed":
+            return clampBlock({ ...base, kind: "youtube", url: null });
+        case "countdown":
+            return clampBlock({
+                ...base,
+                targetAt: new Date(
+                    Date.now() + PROFILE_COUNTDOWN_DEFAULT_DAYS * 86_400_000,
+                ).toISOString(),
+                title: null,
             });
     }
 };

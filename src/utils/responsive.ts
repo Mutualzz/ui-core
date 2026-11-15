@@ -1,6 +1,9 @@
 import type { Theme } from "@emotion/react";
 import type { Breakpoint, Responsive } from "@ui-types";
 
+const isResponsiveObject = (value: unknown) =>
+    value != null && typeof value === "object" && !Array.isArray(value);
+
 export const resolveResponsiveProp = <T>(
     theme: Theme,
     prop: Responsive<T>,
@@ -95,6 +98,9 @@ export const resolveResponsiveMerge = <T extends Record<string, any>>(
     props: { [K in keyof T]: Responsive<T[K]> },
     styleFn: (values: T) => Record<string, any>,
 ): Record<string, any> => {
+    if (!Object.values(props).some(isResponsiveObject))
+        return styleFn(props as T);
+
     const breakpoints = theme.breakpoints.keys;
     const merged: Responsive<T> = {};
 

@@ -15,6 +15,7 @@ export function buildProfileBackgroundCss(options: {
     backgroundColor?: string | null;
     backgroundImageUrl?: string | null;
     fallback: string;
+    imagePosition?: string;
 }): string {
     const fill = resolveProfileBackgroundFill(
         options.backgroundColor,
@@ -22,10 +23,44 @@ export function buildProfileBackgroundCss(options: {
     );
 
     if (options.backgroundImageUrl) {
-        return `url("${options.backgroundImageUrl}") center / cover no-repeat, ${fill}`;
+        return `url("${options.backgroundImageUrl}") ${options.imagePosition ?? "center"} / cover no-repeat, ${fill}`;
     }
 
     return fill;
+}
+
+export type ProfileBackgroundImageLayer =
+    | { kind: "image"; fadeStart: number }
+    | { kind: "css"; background: string; square: boolean };
+
+export function getProfileBackgroundImageLayer(
+    imageUrl: string,
+    fit: string | null | undefined,
+): ProfileBackgroundImageLayer {
+    const url = `url("${imageUrl}")`;
+
+    switch (fit) {
+        case "fitWidth":
+            return { kind: "image", fadeStart: 80 };
+        case "repeatDown":
+            return {
+                kind: "css",
+                background: `${url} top center / 100% auto repeat-y`,
+                square: false,
+            };
+        case "tile":
+            return {
+                kind: "css",
+                background: `${url} top left / auto repeat`,
+                square: false,
+            };
+        default:
+            return {
+                kind: "css",
+                background: `${url} top center / cover no-repeat`,
+                square: true,
+            };
+    }
 }
 
 export function parseProfileBackgroundColors(

@@ -10,6 +10,7 @@ export const baseLightTheme: Theme = {
     adaptive: false,
     type: "light",
     style: "normal",
+    collection: "classic",
     colors: {
         common: { white: "#FFFFFF", black: "#0D0F12" },
         primary: "#8A2E6C",
@@ -27,7 +28,7 @@ export const baseLightTheme: Theme = {
         colors: {
             primary: "#22161F",
             secondary: "#6C5D69",
-            accent: "#00D1C1",
+            accent: "#009488",
             muted: "#8A7283",
         },
     },

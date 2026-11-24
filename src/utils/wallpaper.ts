@@ -34,7 +34,7 @@ export interface ResolvedThemeWallpaper {
 }
 
 export const DEFAULT_WALLPAPER_DARK: ResolvedThemeWallpaper = {
-    brightness: 102,
+    brightness: 100,
     saturation: 100,
     overlay: 28,
     chrome: 76,
@@ -46,7 +46,7 @@ export const DEFAULT_WALLPAPER_DARK: ResolvedThemeWallpaper = {
 };
 
 export const DEFAULT_WALLPAPER_LIGHT: ResolvedThemeWallpaper = {
-    brightness: 106,
+    brightness: 100,
     saturation: 100,
     overlay: 12,
     chrome: 80,
@@ -64,11 +64,17 @@ export function hasWallpaper(theme: Theme) {
 export function resolveWallpaperSettings(
     theme: Theme,
 ): ResolvedThemeWallpaper {
-    return {
-        ...(theme.type === "light"
+    const defaults =
+        theme.type === "light"
             ? DEFAULT_WALLPAPER_LIGHT
-            : DEFAULT_WALLPAPER_DARK),
-    };
+            : DEFAULT_WALLPAPER_DARK;
+    const storedValues = Object.fromEntries(
+        Object.entries(theme.wallpaper ?? {}).filter(
+            ([, settingValue]) => typeof settingValue === "number",
+        ),
+    );
+
+    return { ...defaults, ...storedValues };
 }
 
 export function resolveWallpaperScrim(theme: Theme): string {
@@ -100,7 +106,12 @@ export function resolveWallpaperDivider(theme: Theme) {
 
 export function resolveWallpaperImageFilter(theme: Theme) {
     const settings = resolveWallpaperSettings(theme);
-    return `brightness(${settings.brightness / 100}) saturate(${settings.saturation / 100})`;
+    const filters = [
+        settings.brightness !== 100 && `brightness(${settings.brightness / 100})`,
+        settings.saturation !== 100 && `saturate(${settings.saturation / 100})`,
+        settings.blur > 0 && `blur(${settings.blur}px)`,
+    ].filter(Boolean);
+    return filters.length > 0 ? filters.join(" ") : "none";
 }
 
 export function resolveWallpaperSurfaceAlpha(

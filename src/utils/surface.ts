@@ -97,11 +97,17 @@ export function resolveOpaqueSurfaceBase(
 
 export interface PanelFillStyles {
     background?: string;
+    backgroundAttachment?: string;
     backgroundColor?: string;
     backgroundImage?: string;
     backgroundRepeat?: string;
     backgroundSize?: string;
 }
+
+const elevationOverlay = (elevation: number) => {
+    const strength = Math.min(0.04 + elevation * 0.025, 0.2);
+    return `linear-gradient(rgba(255,255,255,${strength}), rgba(255,255,255,${strength}))`;
+};
 
 export function resolvePanelFill(
     theme: Theme,
@@ -123,7 +129,12 @@ export function resolvePanelFill(
 
     if (opacity >= 100) {
         if (isValidGradient(elevatedColor)) {
-            return { background: elevatedColor };
+            return {
+                backgroundImage: `${elevationOverlay(elevation)}, ${elevatedColor}`,
+                backgroundAttachment: "scroll, fixed",
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "cover",
+            };
         }
 
         return {
@@ -138,11 +149,9 @@ export function resolvePanelFill(
 
     if (isValidGradient(elevatedColor)) {
         return {
-            backgroundColor: resolveOpaqueSurfaceBase(
-                theme,
-                elevatedColor,
-            ),
-            backgroundImage: tinted,
+            backgroundColor: resolveOpaqueSurfaceBase(theme, elevatedColor),
+            backgroundImage: `${elevationOverlay(elevation)}, ${tinted}`,
+            backgroundAttachment: "scroll, fixed",
             backgroundRepeat: "no-repeat",
             backgroundSize: "cover",
         };

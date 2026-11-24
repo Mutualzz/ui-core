@@ -146,6 +146,15 @@ export type ThemeVarColor = Color | "text";
 export type Responsive<T> = T | Partial<Record<Breakpoint, T>>;
 export type ThemeType = "light" | "dark";
 export type ThemeStyle = "normal" | "gradient";
+export type ThemeCollection =
+    | "classic"
+    | "gothic"
+    | "romance"
+    | "ethereal"
+    | "arcane"
+    | "ocean"
+    | "nature"
+    | "industrial";
 
 export type AllowNumber<T> = T | number;
 
@@ -195,6 +204,7 @@ export interface MzTheme {
     adaptive: boolean;
     type: ThemeType;
     style: ThemeStyle;
+    collection?: ThemeCollection;
     colors: {
         common: {
             white: ColorLike;
@@ -253,6 +263,7 @@ export interface MzTheme {
 
     backgroundImage?: string | null;
     backgroundImageUrl?: string | null;
+    backgroundVideoUrl?: string | null;
     wallpaper?: {
         brightness?: number;
         saturation?: number;

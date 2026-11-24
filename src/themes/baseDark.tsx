@@ -10,6 +10,7 @@ export const baseDarkTheme: Theme = {
     adaptive: false,
     type: "dark",
     style: "normal",
+    collection: "classic",
     colors: {
         common: { white: "#F9F6F9", black: "#0B0710" },
         primary: "#88449a",

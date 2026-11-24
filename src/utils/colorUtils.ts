@@ -162,8 +162,8 @@ export const handleColor = (str: string | HsvaColor): ColorResult => {
         hex = str as Hex;
     } else if (typeof str !== "string") {
         // @ts-expect-error We expect str to not have position and id, but we need to strip it runtime since it's coming from a different component
-        const { position, id, ...rest } = str;
-        hsva = rest;
+        const { position, id, alpha, ...rest } = str;
+        hsva = { ...rest, alpha: alpha ?? 1 };
     }
 
     if (hsva) {
